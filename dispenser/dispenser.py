@@ -58,3 +58,7 @@ class BasicDispenser(SingleCurrencyDispenser):
             ],
             DispenseHandler()
         )
+
+
+basic_dispenser = BasicDispenser()
+
