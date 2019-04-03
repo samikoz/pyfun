@@ -4,8 +4,7 @@ RUN useradd dispenser
 
 WORKDIR /home/dispenser
 
-COPY index.html ./
-COPY script.js ./
+COPY . .
 
 EXPOSE 8000
 ENTRYPOINT python -m http.server 8000
