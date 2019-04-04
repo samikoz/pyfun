@@ -4,7 +4,8 @@ send_button.addEventListener('click', dispenseGivenAmount);
 function dispenseGivenAmount() {
     fetchDispensedNotes(getRequestedAmount())
     .then(getResponseContentIfOk)
-    .then(printDispensedNotes);
+    .then(printDispensedNotes)
+    .then(clearEnteredAmount);
 }
 
 function fetchDispensedNotes(amount_to_dispense) {
@@ -12,7 +13,7 @@ function fetchDispensedNotes(amount_to_dispense) {
 }
 
 function getRequestedAmount() {
-    return document.getElementById('dispense_field').value;
+    return document.getElementById('requested_amount').value;
 }
 
 function getResponseContentIfOk(response) {
@@ -31,7 +32,7 @@ function sanitiseEnteredAmount() {
 }
 
 function clearEnteredAmount() {
-
+    document.getElementById('dispense_form').reset();
 }
 
 function replaceDispensedAmount() {
