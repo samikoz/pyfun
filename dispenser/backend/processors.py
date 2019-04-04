@@ -1,6 +1,5 @@
 import request
-from dispenser_types import Processor, Request, Container, Navigator
-from dispenser_types import ContainerNavigator
+from dispenser_types import Processor, Request, Container
 from notes import Note
 from exceptions import NoteUnavailableException
 
@@ -8,27 +7,30 @@ from exceptions import NoteUnavailableException
 class RegularNoteProcessor(Processor):
     def __init__(self, note: Note):
         self._note = note
+        self._note_container = None
 
-    def _notes_to_withdraw(self, amount: float, container: Container) -> float:
+    def get_note(self):
+        return self._note
+
+    def give_container(self, container):
+        self._note_container = container
+
+    def _notes_to_withdraw(self, amount: float) -> float:
         return min(
             int(amount // self._note.value()),
-            self._check_available(container)
+            self._check_available(self._note_container)
         )
 
     @staticmethod
     def _check_available(container: Container) -> int:
         return container.available()
 
-    def _request_container(self, navigator: ContainerNavigator) -> Container:
-        return navigator.request_container(self._note)
-
-    def process(self, req: request.PendingRequest, nav: ContainerNavigator) -> \
+    def process(self, req: request.PendingRequest) -> \
             request.PendingRequest:
 
         if isinstance(req, request.DispenseRequest):
             to_widthdraw: int = self._notes_to_withdraw(
-                req.to_process(),
-                self._request_container(nav)
+                req.to_process()
             )
             return req.order_withdrawal(self._note, to_widthdraw)
         else:
@@ -37,7 +39,7 @@ class RegularNoteProcessor(Processor):
 
 class AssertNothingRemainsProcessor(Processor):
 
-    def process(self, req: request.PendingRequest, nav: Navigator=None) -> \
+    def process(self, req: request.PendingRequest) -> \
             Request:
 
         if isinstance(req, request.DispenseRequest):

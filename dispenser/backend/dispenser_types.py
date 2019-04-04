@@ -34,20 +34,15 @@ class ProcessedRequest(Request):
         pass
 
 
-class Navigator(metaclass=abc.ABCMeta):
-    pass
-
-
 class Processor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def process(self, req: PendingRequest, nav: Navigator) -> \
-            PendingRequest:
+    def process(self, req: PendingRequest) -> PendingRequest:
         pass
 
 
 class Handler(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def handle(self, req: ProcessedRequest, nav: Navigator) -> Any:
+    def handle(self, req: ProcessedRequest) -> Any:
         pass
 
 
@@ -59,9 +54,3 @@ class Container(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get(self, number: int) -> MutableSequence[Note]:
         return []
-
-
-class ContainerNavigator(Navigator):
-    @abc.abstractmethod
-    def request_container(self, note: Note) -> Container:
-        pass
