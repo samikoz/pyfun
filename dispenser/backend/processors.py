@@ -7,18 +7,15 @@ from exceptions import NoteUnavailableException
 class RegularNoteProcessor(Processor):
     def __init__(self, note: Note):
         self._note = note
-        self._note_container = None
+        self._chain = None
 
-    def get_note(self):
-        return self._note
-
-    def give_container(self, container):
-        self._note_container = container
+    def give_chain(self, chain):
+        self._chain = chain
 
     def _notes_to_withdraw(self, amount: float) -> float:
         return min(
             int(amount // self._note.value()),
-            self._check_available(self._note_container)
+            self._check_available(self._chain.get_container(self._note))
         )
 
     @staticmethod
@@ -38,6 +35,9 @@ class RegularNoteProcessor(Processor):
 
 
 class AssertNothingRemainsProcessor(Processor):
+
+    def give_chain(self, chain):
+        pass
 
     def process(self, req: request.PendingRequest) -> \
             Request:

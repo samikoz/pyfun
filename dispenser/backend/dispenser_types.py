@@ -40,12 +40,6 @@ class Processor(metaclass=abc.ABCMeta):
         pass
 
 
-class Handler(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def handle(self, req: ProcessedRequest) -> Any:
-        pass
-
-
 class Container(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def available(self) -> int:
