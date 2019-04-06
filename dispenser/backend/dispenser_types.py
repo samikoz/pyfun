@@ -34,12 +34,6 @@ class ProcessedRequest(Request):
         pass
 
 
-class Processor(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def process(self, req: PendingRequest) -> PendingRequest:
-        pass
-
-
 class Container(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def available(self) -> int:

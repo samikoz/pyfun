@@ -1,5 +1,5 @@
 from request import DispenseRequest, PendingRequest
-from chains import ProcessorChain
+from chains import ChainDivisor
 from navigators import DispenserNavigator
 from notes import NotePLN
 from containers import NoteContainer
@@ -12,7 +12,7 @@ class TestRegularProcessing:
         proc: processors.Processor = processors.RegularNoteProcessor(NotePLN(5))
         nav: DispenserNavigator = DispenserNavigator()
         nav.point_containers({NotePLN(5): NoteContainer(NotePLN(5), 3)})
-        chain: ProcessorChain = ProcessorChain([proc], nav)
+        chain: ChainDivisor = ChainDivisor([proc], nav)
 
         processed: PendingRequest = proc.process(req, chain)
 

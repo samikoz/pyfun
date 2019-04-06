@@ -1,17 +1,16 @@
-from typing import Mapping, Sequence
+from typing import Mapping
 
-from dispenser_types import Processor, ProcessedRequest, Dispenser
-from processors import RegularNoteProcessor, AssertNothingRemainsProcessor
+from dispenser_types import ProcessedRequest, Dispenser
 from containers import NoteContainer
 from notes import Note, NotePLN
-from chains import ProcessorChain
+from chains import ChainDivisor
 from exceptions import InvalidArgumentException
 
 
 class SingleCurrencyDispenser(Dispenser):
-    def __init__(self, containers, processors: Sequence[Processor]) -> None:
+    def __init__(self, containers) -> None:
 
-        self._processor_chain = ProcessorChain(processors, containers)
+        self._processor_chain = ChainDivisor(list(containers.keys()), containers)
 
     def dispense(self, amount: float) -> Mapping[Note, int]:
         if amount < 0:
@@ -31,14 +30,7 @@ class BasicDispenser(SingleCurrencyDispenser):
                 NotePLN(50): NoteContainer(NotePLN(50), 10**5),
                 NotePLN(20): NoteContainer(NotePLN(20), 10**5),
                 NotePLN(10): NoteContainer(NotePLN(10), 10**5)
-            },
-            [
-                RegularNoteProcessor(NotePLN(100)),
-                RegularNoteProcessor(NotePLN(50)),
-                RegularNoteProcessor(NotePLN(20)),
-                RegularNoteProcessor(NotePLN(10)),
-                AssertNothingRemainsProcessor()
-            ]
+            }
         )
 
 
