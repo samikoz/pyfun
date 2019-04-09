@@ -4,7 +4,3 @@ class DispenserException(Exception):
 
 class NoteUnavailableException(DispenserException):
     pass
-
-
-class InvalidArgumentException(DispenserException):
-    pass

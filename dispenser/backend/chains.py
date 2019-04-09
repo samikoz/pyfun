@@ -1,29 +1,32 @@
 import functools
 import itertools
-from typing import Any
+from typing import Any, Mapping, Sequence
 from exceptions import NoteUnavailableException
 
+from containers import NoteContainer
+from dispenser_types import Note, ChainDivisor, Container
 import request
 
 
-class ChainDivisor:
-    def __init__(self, supported_notes, containers) -> None:
+class SingleCurrencyChainDivisor(ChainDivisor):
+    def __init__(self, notes_seed: Mapping[Note, int]) -> None:
+        self._notes: Sequence[Note] = sorted(
+            notes_seed, key=lambda note: note.value(), reverse=True
+        )
+        self._containers: Mapping[Note, Container] = {
+            note: NoteContainer(note, number)
+            for note, number in notes_seed.items()
+        }
 
-        self._notes = sorted(supported_notes, key=lambda note: note.value(), reverse=True)
-        self._containers = containers
-
-    def get_container(self, note):
-        return self._containers.get(note)
-
-    def _process_single_note(self, note, req):
-        number_to_widthdraw = min(
+    def _process_single_note(self, note: Note, req: request.PendingRequest) -> request.PendingRequest:
+        number_to_widthdraw: int = min(
             int(req.to_process() // note.value()),
             self._containers.get(note).available()
         )
         return req.order_withdrawal(note, number_to_widthdraw)
 
-    def process(self, amount: float):
-        processed = functools.reduce(
+    def process(self, amount: float) -> request.DispenseOutcome:
+        processed: request.PendingRequest = functools.reduce(
             lambda req, note_to_process:
                 self._process_single_note(note_to_process, req),
             self._notes,
@@ -35,7 +38,6 @@ class ChainDivisor:
             return request.DispenseOutcome(processed.to_dispense())
 
     def handle(self, req: request.ProcessedRequest) -> Any:
-
         if isinstance(req, request.DispenseOutcome):
             return list(itertools.chain(*(
                 self._containers.get(note).get(number)
