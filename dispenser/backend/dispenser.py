@@ -1,15 +1,20 @@
-from typing import Mapping, Sequence
+from typing import Mapping
 
-from dispenser_types import Dispenser, Note, ChainDivisor
-from chains import SingleCurrencyChainDivisor
+from dispenser_types import Dispenser, Note, Chain, ContainerChain
+from divisor_chain import SingleCurrencyDivisorChain
+from container_chain import SingleCurrencyContainerChain
 
 
 class SingleCurrencyDispenser(Dispenser):
     def __init__(self, notes_seed: Mapping[Note, int]) -> None:
-        self._available_notes: Sequence[Note] = sorted(
-            notes_seed.keys(), key=lambda note: note.value(), reverse=True
+        self._container_chain: ContainerChain = SingleCurrencyContainerChain(
+            notes_seed
         )
-        self._chain: ChainDivisor = SingleCurrencyChainDivisor(notes_seed)
+        self._divisor_chain: Chain = SingleCurrencyDivisorChain(
+            self._container_chain
+        )
 
     def dispense(self, amount: float) -> Mapping[Note, int]:
-        return self._chain.handle(self._chain.process(amount))
+        return self._container_chain.process(
+            self._divisor_chain.process(amount)
+        )

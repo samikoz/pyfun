@@ -6,7 +6,7 @@ import processors
 from dispenser_types import Container
 from notes import NotePLN, Note
 from exceptions import NoteUnavailableException
-from request import PendingRequest, ProcessedRequest, DispenseRequest
+from request import PendingRequest, DividedRequest, DispenseRequest
 from navigators import ContainerNavigator
 
 
@@ -62,7 +62,7 @@ class TestAssertNothingToProcessProcessor:
         req: PendingRequest = MockRequest(0.0)
 
         proc: processors = processors.AssertNothingRemainsProcessor()
-        assert isinstance(proc.process(req), ProcessedRequest)
+        assert isinstance(proc.process(req), DividedRequest)
 
     def test_not_fully_processed(self):
         req: PendingRequest = MockRequest(12.0)

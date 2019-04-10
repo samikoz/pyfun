@@ -3,7 +3,6 @@ from typing import MutableSequence
 from dispenser_types import Container
 
 from notes import Note
-from exceptions import NoteUnavailableException
 
 
 class NoteContainer(Container):
@@ -15,7 +14,18 @@ class NoteContainer(Container):
         return self._available
 
     def get(self, number: int) -> MutableSequence[Note]:
-        if number > self._available:
-            raise NoteUnavailableException(self._note)
+        assert self._available > number
+
         self._available -= number
         return [self._note.clone() for _ in itertools.repeat(None, number)]
+
+
+class VoidContainer(Container):
+    def available(self) -> int:
+        return 0
+
+    def get(self, number: int) -> MutableSequence[Note]:
+        return []
+
+
+void_container = VoidContainer()
