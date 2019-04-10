@@ -19,3 +19,4 @@ allow for infinity in number of notes
 4. Inspect tests and mocks; do not test internals (e.g. processor)
 5. Inspect RegularNoteProcessor's logic
 6. Think about dispense's return type
+7. Generics for chains?

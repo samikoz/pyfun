@@ -1,6 +1,6 @@
 import abc
 import functools
-from typing import MutableMapping, Any, MutableSequence, Mapping
+from typing import MutableMapping, Any, MutableSequence, Mapping, Sequence
 
 
 @functools.total_ordering
@@ -36,28 +36,10 @@ class Note:
         return Note(self.value(), self._currency)
 
 
-class Request(metaclass=abc.ABCMeta):
-    pass
-
-
-class PendingRequest(Request):
+class DividedRequest:
     @abc.abstractmethod
-    def to_process(self) -> float:
+    def get_requested_number(self, note: Note) -> int:
         return 0
-
-    @abc.abstractmethod
-    def to_dispense(self) -> MutableMapping[Note, int]:
-        return {}
-
-    @abc.abstractmethod
-    def order_withdrawal(self, note: Note, number: int) -> 'PendingRequest':
-        pass
-
-
-class ProcessedRequest(Request):
-    @abc.abstractmethod
-    def results(self) -> Any:
-        pass
 
 
 class Dispenser(metaclass=abc.ABCMeta):
@@ -66,14 +48,20 @@ class Dispenser(metaclass=abc.ABCMeta):
         return {}
 
 
-class ChainDivisor(metaclass=abc.ABCMeta):
+class Chain(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def process(self, amount: float) -> ProcessedRequest:
+    def process(self, x: Any) -> Any:
         pass
 
+
+class ContainerChain(Chain):
     @abc.abstractmethod
-    def handle(self, request: ProcessedRequest) -> Any:
-        pass
+    def get_available_notes(self) -> Sequence[Note]:
+        return []
+
+    @abc.abstractmethod
+    def get_available_amount(self, note: Note) -> int:
+        return 0
 
 
 class Container(metaclass=abc.ABCMeta):

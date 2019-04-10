@@ -16,5 +16,5 @@ class TestRegularProcessing:
 
         processed: PendingRequest = proc.process(req, chain)
 
-        assert processed.to_process() == 9.0
+        assert processed.get_amount_to_process() == 9.0
         assert processed.to_dispense().get(NotePLN(5)) == 3
