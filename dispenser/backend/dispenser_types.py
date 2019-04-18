@@ -1,6 +1,10 @@
+# module gathering types used in the project
+
+# the type-classes are arranged within the module with increasing generality
+
 import abc
 import functools
-from typing import Any, MutableSequence, Mapping, Sequence
+from typing import Any, Sequence
 
 
 @functools.total_ordering
@@ -10,13 +14,7 @@ class Note:
         self._currency: str = currency
 
     def __eq__(self, other: Any) -> bool:
-        return (
-            isinstance(other, Note)
-            and
-            self._currency == other._currency
-            and
-            self.value() == other.value()
-        )
+        return isinstance(other, Note) and self._currency == other._currency and self.value() == other.value()
 
     def __hash__(self) -> int:
         return hash(self.value())
@@ -36,47 +34,43 @@ class Note:
         return Note(self.value(), self._currency)
 
 
-class DividedRequest:
-    @abc.abstractmethod
-    def get_requested_number(self, note: Note) -> int:
-        return 0
-
-    @abc.abstractmethod
-    def assert_nothing_remains(self):
-        pass
-
-
-class Dispenser(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def dispense(self, amount: float) -> Mapping[Note, int]:
-        return {}
-
-
-class DivisorChain(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def divide_into_notes(self, x: float) -> DividedRequest:
-        pass
-
-
-class ContainerChain(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def get_available_notes(self) -> Sequence[Note]:
-        return []
-
-    @abc.abstractmethod
-    def get_available_amount(self, note: Note) -> int:
-        return 0
-
-    @abc.abstractmethod
-    def dispense_notes(self, dispense_request: DividedRequest) -> Mapping[Note, int]:
-        return {}
-
-
 class Container(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def available(self) -> int:
         return 0
 
     @abc.abstractmethod
-    def get(self, number: int) -> MutableSequence[Note]:
+    def take(self, number: int) -> Sequence[Note]:
+        return []
+
+
+class Division:
+    @abc.abstractmethod
+    def get_requested_number(self, note: Note) -> int:
+        return 0
+
+
+class ContainerGroup(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def get_available_note_types(self) -> Sequence[Note]:
+        return []
+
+    @abc.abstractmethod
+    def get_available(self, note: Note) -> int:
+        return 0
+
+    @abc.abstractmethod
+    def dispense_notes(self, dispense_request: Division) -> Sequence[Note]:
+        return {}
+
+
+class Divisor(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def subdivide(self, x: float) -> Division:
+        pass
+
+
+class Dispenser(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def dispense(self, amount: float) -> Sequence[Note]:
         return []

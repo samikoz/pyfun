@@ -2,7 +2,7 @@ from request import DispenseRequest, PendingRequest
 from chains import SingleCurrencyChainDivisor
 from navigators import DispenserNavigator
 from notes import NotePLN
-from containers import NoteContainer
+from container import NoteContainer
 import processors
 
 

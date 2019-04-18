@@ -1,7 +1,7 @@
 from typing import MutableSequence, AbstractSet
 import pytest
 
-from containers import NoteContainer
+from container import NoteContainer
 from notes import NotePLN
 from exceptions import NoteUnavailableException
 
