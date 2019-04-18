@@ -1,6 +1,6 @@
 import abc
 import functools
-from typing import MutableMapping, Any, MutableSequence, Mapping, Sequence
+from typing import Any, MutableSequence, Mapping, Sequence
 
 
 @functools.total_ordering
@@ -41,6 +41,10 @@ class DividedRequest:
     def get_requested_number(self, note: Note) -> int:
         return 0
 
+    @abc.abstractmethod
+    def assert_nothing_remains(self):
+        pass
+
 
 class Dispenser(metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -48,13 +52,13 @@ class Dispenser(metaclass=abc.ABCMeta):
         return {}
 
 
-class Chain(metaclass=abc.ABCMeta):
+class DivisorChain(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def process(self, x: Any) -> Any:
+    def divide_into_notes(self, x: float) -> DividedRequest:
         pass
 
 
-class ContainerChain(Chain):
+class ContainerChain(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_available_notes(self) -> Sequence[Note]:
         return []
@@ -62,6 +66,10 @@ class ContainerChain(Chain):
     @abc.abstractmethod
     def get_available_amount(self, note: Note) -> int:
         return 0
+
+    @abc.abstractmethod
+    def dispense_notes(self, dispense_request: DividedRequest) -> Mapping[Note, int]:
+        return {}
 
 
 class Container(metaclass=abc.ABCMeta):

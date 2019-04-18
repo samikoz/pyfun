@@ -7,16 +7,14 @@ later enhanced to serve as a code sample.
 ## Usage
 
 ## Todo
-1. ChainDivisor spits out a Request object which can be queried for a note
-and returns how many to dispense. Request has to expose method checking 
-whether the amount is exhausted. Then something has to supervise the
-individual dispensing. Think whether ChainDivisor operates on Request
-internally (atm it does). Test it, correct typing.
+0. Make the application work
+1. ChainDivisor into DivisionFactory initiated with ContainerChain
+with single method divide(amount) producing Division(amount) object 
+to be accepted by ContainerChain. All dividing logic moved to Division
 2. Make sure internals of no object are compromised. Rethink
 where getters and setters are appropriate.
 3. Rethink dispenser_types: rename the file, introduce note type,
 allow for infinity in number of notes
 4. Inspect tests and mocks; do not test internals (e.g. processor)
-5. Inspect RegularNoteProcessor's logic
-6. Think about dispense's return type
-7. Generics for chains?
+5. Think about dispense's return type
+6. Order dispenser_types bottom-up and mark it with a comment

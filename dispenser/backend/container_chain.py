@@ -1,5 +1,5 @@
 import itertools
-from typing import Mapping, Sequence, Any
+from typing import Mapping, Sequence
 
 from containers import NoteContainer, void_container
 from dispenser_types import ContainerChain, DividedRequest, Note, Container
@@ -26,8 +26,8 @@ class SingleCurrencyContainerChain(ContainerChain):
         self._available_notes = self._available_notes[:note_index] + \
             self._available_notes[note_index+1:]
 
-    def process(self, req: DividedRequest) -> Any:
+    def dispense_notes(self, req: DividedRequest) -> Sequence[Note]:
+        req.assert_nothing_remains()
         return list(itertools.chain(*(
-            self._containers.get(note).get(number)
-            for note, number in req.results().items()
+            self._containers.get(note).get(req.get_requested_number(note)) for note in self.get_available_notes()
         )))
