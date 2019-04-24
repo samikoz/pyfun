@@ -6,7 +6,7 @@ from notes import NotePLN
 class TestDispenser:
     @pytest.mark.parametrize('amount,dispensed', [
         (30.0, [NotePLN(20), NotePLN(10)]),
-        (90.0, [NotePLN(50), NotePLN(20), NotePLN(20), NotePLN(10)]),
+        (90.0, [NotePLN(50), NotePLN(20), NotePLN(20)]),
         (150, [NotePLN(100), NotePLN(50)]),
         (0, [])
     ])

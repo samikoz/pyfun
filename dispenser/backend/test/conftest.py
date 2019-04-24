@@ -8,10 +8,16 @@ from dispenser import SingleCurrencyDispenser
 
 
 class MockTwenty(Note):
+    def __eq__(self, other):
+        return isinstance(other, MockTwenty) and other.value() == 20
+
+    def __hash__(self):
+        return hash(20)
+
     def value(self) -> int:
         return 20
 
-    def clone(self) -> 'Note':
+    def clone(self) -> 'MockTwenty':
         return MockTwenty()
 
 
