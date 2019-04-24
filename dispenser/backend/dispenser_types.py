@@ -3,35 +3,17 @@
 # the type-classes are arranged within the module with increasing generality
 
 import abc
-import functools
-from typing import Any, Sequence
+from typing import Sequence
 
 
-@functools.total_ordering
 class Note:
-    def __init__(self, value: int, currency: str = '') -> None:
-        self._value: int = value
-        self._currency: str = currency
-
-    def __eq__(self, other: Any) -> bool:
-        return isinstance(other, Note) and self._currency == other._currency and self.value() == other.value()
-
-    def __hash__(self) -> int:
-        return hash(self.value())
-
-    def __repr__(self) -> str:
-        return f'Note({self.value()}{self._currency})'
-
-    def __lt__(self, other: Any):
-        if not isinstance(other, Note) or self._currency != other._currency:
-            raise ValueError('Can only compare notes of the same currency')
-        return self.value() < other.value()
-
+    @abc.abstractmethod
     def value(self) -> int:
-        return self._value
+        return 0
 
+    @abc.abstractmethod
     def clone(self) -> 'Note':
-        return Note(self.value(), self._currency)
+        pass
 
 
 class Container(metaclass=abc.ABCMeta):
@@ -67,6 +49,10 @@ class ContainerGroup(metaclass=abc.ABCMeta):
 class Divisor(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def subdivide(self, x: float) -> Division:
+        pass
+
+    @abc.abstractmethod
+    def assert_nothing_remains(self, div: Division) -> None:
         pass
 
 

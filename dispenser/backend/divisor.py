@@ -9,11 +9,10 @@ class SubdividedAmount(Division):
         self._to_dispense: MutableMapping[Note, int] = {}
         self._containers: ContainerGroup = containers
 
-    def subdivide(self) -> Division:
+    def subdivide(self) -> 'SubdividedAmount':
         for note in self._containers.get_available_note_types():
             self._divide_by_note(note)
 
-        self._assert_nothing_remains()
         return self
 
     def _divide_by_note(self, note: Note) -> None:
@@ -27,7 +26,7 @@ class SubdividedAmount(Division):
         self._to_dispense[note] = number
         self._amount_left -= number * note.value()
 
-    def _assert_nothing_remains(self) -> None:
+    def assert_nothing_remains(self) -> None:
         if self._amount_left:
             raise ValueError('Cannot realise dispense request with available notes')
 
@@ -39,5 +38,10 @@ class DivisionFactory(Divisor):
     def __init__(self, container_chain: ContainerGroup) -> None:
         self._containers: ContainerGroup = container_chain
 
-    def subdivide(self, amount: float) -> Division:
-        return SubdividedAmount(amount, self._containers).subdivide()
+    def subdivide(self, amount: float) -> SubdividedAmount:
+        subdivided: SubdividedAmount = SubdividedAmount(amount, self._containers).subdivide()
+        self.assert_nothing_remains(subdivided)
+        return subdivided
+
+    def assert_nothing_remains(self, div: SubdividedAmount) -> None:
+        div.assert_nothing_remains()
