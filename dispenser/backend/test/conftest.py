@@ -17,8 +17,16 @@ class MockTwenty(Note):
     def value(self) -> int:
         return 20
 
-    def clone(self) -> 'MockTwenty':
+    def clone(self) -> Note:
         return MockTwenty()
+
+
+class MockTener(Note):
+    def value(self) -> int:
+        return 10
+
+    def clone(self) -> Note:
+        return MockTener()
 
 
 class MockSingleTwentyContainer(ContainerGroup):
@@ -31,6 +39,11 @@ class MockSingleTwentyContainer(ContainerGroup):
 
     def dispense_notes(self, dispense_request: Division) -> Sequence[Note]:
         return [MockTwenty() for _ in itertools.repeat(None, dispense_request.get_requested_number(MockTwenty()))]
+
+
+class MockAlwaysTwoDivision(Division):
+    def get_requested_number(self, note: Note) -> int:
+        return 2
 
 
 @pytest.fixture()
@@ -49,5 +62,14 @@ def mock_twenty():
 
 
 @pytest.fixture()
+def mock_tener():
+    return MockTener()
+
+@pytest.fixture()
 def mock_container_group():
     return MockSingleTwentyContainer()
+
+
+@pytest.fixture()
+def mock_always_two_division():
+    return MockAlwaysTwoDivision()

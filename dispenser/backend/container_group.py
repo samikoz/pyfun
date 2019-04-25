@@ -1,7 +1,7 @@
 import itertools
 from typing import Mapping, Sequence, Iterable
 
-from container import NoteContainer, void_container
+from container import CloningContainer, void_container
 from dispenser_types import ContainerGroup, Division, Note, Container
 
 
@@ -11,7 +11,7 @@ class SingleCurrencyContainerGroup(ContainerGroup):
             notes_seed.keys(), key=lambda note: note.value(), reverse=True
         )
         self._containers: Mapping[Note, Container] = {
-            note: NoteContainer(note, number)
+            note: CloningContainer(note, number)
             for note, number in notes_seed.items()
         }
 

@@ -5,7 +5,7 @@ from dispenser_types import Container
 from notes import Note
 
 
-class NoteContainer(Container):
+class CloningContainer(Container):
     def __init__(self, note: Note, seed: int) -> None:
         self._available: int = seed
         self._note: Note = note
