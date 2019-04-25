@@ -7,26 +7,31 @@ from dispenser_types import ContainerGroup, Note, Division
 from dispenser import SingleCurrencyDispenser
 
 
-class MockTwenty(Note):
+class MockNote(Note):
+    def __init__(self, note_value: int):
+        self._value = note_value
+
     def __eq__(self, other):
-        return isinstance(other, MockTwenty) and other.value() == 20
+        return isinstance(other, MockTwenty) and other.value() == self.value()
 
     def __hash__(self):
-        return hash(20)
+        return hash(self._value)
 
     def value(self) -> int:
-        return 20
+        return self._value
 
     def clone(self) -> Note:
-        return MockTwenty()
+        return self.__class__()
 
 
-class MockTener(Note):
-    def value(self) -> int:
-        return 10
+class MockTwenty(MockNote):
+    def __init__(self):
+        super().__init__(20)
 
-    def clone(self) -> Note:
-        return MockTener()
+
+class MockTener(MockNote):
+    def __init__(self):
+        super().__init__(10)
 
 
 class MockSingleTwentyContainer(ContainerGroup):
