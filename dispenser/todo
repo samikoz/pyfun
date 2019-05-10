@@ -7,20 +7,3 @@ c) reddenForm which will make input field go red and fade away
 d) navigateToDispensedPage
 3. validate will probably be based on express-validator https://express-validator.github.io/docs/
 4. dispensed will be a simple page with the possibility to go back
-
-Immediate:
-Docker base image with node, install express, express-validator
-Make hello-world page and launch docker to test
-Then simply serve the index as we have now - commit at that point
-
-
-first do locally - then we gonna use the ready package.json file:
-mkdir frontend
-cd frontend
-npm init
-npm install express --save
-npm install express-validator --save
-
-
-FROM node:8-jessie
-

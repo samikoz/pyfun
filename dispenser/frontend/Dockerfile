@@ -1,10 +1,11 @@
-FROM python:3.7.3-stretch
+FROM node:8-jesse
 
-RUN useradd dispenser
+RUN useradd front
 
-WORKDIR /home/dispenser
+WORKDIR /home/front
 
 COPY . .
+RUN npm install
 
 EXPOSE 8000
-ENTRYPOINT python -m http.server 8000
+ENTRYPOINT node index.js
