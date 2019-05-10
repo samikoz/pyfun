@@ -1,9 +1,0 @@
-Frontend:
-1. Express app with endpoints: '/', 'validate' and 'dispensed'
-2. / will have a form with the following untestable JS functions:
-a) requestValidation which sends amount to validate endpt
-b) handleValidationResponse
-c) reddenForm which will make input field go red and fade away
-d) navigateToDispensedPage
-3. validate will probably be based on express-validator https://express-validator.github.io/docs/
-4. dispensed will be a simple page with the possibility to go back
