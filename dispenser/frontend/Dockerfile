@@ -1,4 +1,4 @@
-FROM node:8-jesse
+FROM node:8-jessie
 
 RUN useradd front
 
