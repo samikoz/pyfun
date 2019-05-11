@@ -1,28 +1,31 @@
-const express = require('express')
+const express = require('express');
+const {check, validationResult} = require('express-validator/check');
+
 const app = express();
 const port = 8000;
 
-// want to serve only index, without js files
 app.use(express.static('static_files'));
 
-// get? have to post the amount
-app.get('validate', (res, req) => {
-// https://express-validator.github.io/docs/
-// ensure non-negative number
-// only one comma
-// trim leading zeros
-// comma into dot
-// remove trailing zeros after comma
-})
+app.get('/validate', [
+    check('amount').isFloat({min: 0, locale: 'en-GB'})
+], (req, res) => {
+    const errors = validationResult(req);
+    if (! errors.isEmpty()) {
+        return res.status(422).json({
+            amount: req.query.amount,
+            errors: errors.array()
+        });
+    }
+    res.status(200).json({amount: req.query.amount});
+});
 
-// same here, posting validated
-app.get('dispensed', (res, req) => {
+app.get('/dispensed', (req, res) => {
 // a) calls the dispensing endpoint
 // function fetchDispensedNotes(amount_to_dispense) {
 //     return fetch(`${DISPENSE_BACKEND_ENDPOINT}${amount_to_dispense}`);
 // }
 // b) depending on the validation outcome presents one of two pages,
 // the successful one from some sort of template
-})
+});
 
 app.listen(port);

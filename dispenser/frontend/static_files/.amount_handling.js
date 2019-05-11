@@ -8,9 +8,9 @@ function dispenseGivenAmount() {
     .catch(reddenForm)
 }
 
-function validate() {
+function validate(amount) {
     const validation_endpoint = 'localhost:8000/validate';
-    return fetch(validation_endpoint);
+    return fetch(`${validation_endpoint}?amount=${amount}`);
     // logic rejecting promise when validation failed
     // probably with getResponseContentIfOk
 }
