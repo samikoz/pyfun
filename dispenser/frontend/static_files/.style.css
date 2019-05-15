@@ -1,0 +1,6 @@
+.transitionable {
+    -webkit-transition: background-color 2s ease;
+    -moz-transition: background-color 2s ease;
+    -o-transition: background-color 2s ease;
+    transition: background-color 2s ease;
+}
