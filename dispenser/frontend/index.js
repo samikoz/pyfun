@@ -1,6 +1,6 @@
 const express = require('express');
 const {check, validationResult} = require('express-validator/check');
-const env = require('dispenser-env')
+const fetch = require('node-fetch');
 
 const app = express();
 const port = 8000;
@@ -21,13 +21,17 @@ app.get('/validate', [
 });
 
 app.get('/dispensed', (req, res) => {
+    // for now it only returns response
+    // will have to generate some template-html here
+    const backendEndpoint = 'http://127.0.0.1:5000/dispense';
     const amountToDispense = req.query.amount;
-    fetch(`${env.backendEndpoint}?amount=${amountToDispense}`)
+    fetch(`${backendEndpoint}?amount=${amountToDispense}`)
     .then(backendResponse => {
         res.status(backendResponse.status);
         return backendResponse.text();
     })
-    .then(responseText => res.send(responseText));
+    .then(responseText => res.send(responseText))
+    .catch(err => console.log(`Error:  + ${err}`));
     // catch - test with non-working backend & failed response
 });
 

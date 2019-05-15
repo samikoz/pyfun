@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 
 from notes import NotePLN
@@ -15,6 +15,7 @@ dispenser = SingleCurrencyDispenser({
 })
 
 
-@app.route('/dispense/<float:amount>')
-def dispense(amount: float):
+@app.route('/dispense')
+def dispense():
+    amount: float = float(request.args['amount'])
     return str(dispenser.dispense(amount))
