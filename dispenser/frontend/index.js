@@ -3,7 +3,6 @@ const {check, validationResult} = require('express-validator/check');
 const fetch = require('node-fetch');
 
 const app = express();
-const port = 8000;
 
 app.use(express.static('static_files'));
 
@@ -23,16 +22,20 @@ app.get('/validate', [
 app.get('/dispensed', (req, res) => {
     // for now it only returns response
     // will have to generate some template-html here
-    const backendEndpoint = 'http://127.0.0.1:5000/dispense';
     const amountToDispense = req.query.amount;
-    fetch(`${backendEndpoint}?amount=${amountToDispense}`)
+    const dispenseEndpoint = process.env.DISPENSE_ENDPOINT;
+    fetch(`${dispenseEndpoint}?amount=${amountToDispense}`)
     .then(backendResponse => {
         res.status(backendResponse.status);
         return backendResponse.text();
     })
     .then(responseText => res.send(responseText))
-    .catch(err => console.log(`Error:  + ${err}`));
-    // catch - test with non-working backend & failed response
+    .catch(err => {
+        res.send(err);
+    });
+    // catch - test with non-working backend
+    // error template here - could not connect to the dispensing module
+    // and below the exact details
 });
 
-app.listen(port);
+app.listen(process.env.APP_PORT);
