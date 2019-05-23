@@ -5,7 +5,7 @@ send_button.addEventListener('click', dispenseRequestedAmount);
 
 function dispenseRequestedAmount() {
     validate(getRequestedAmount())
-    .then(navigateToDispensedPage())
+    .then(navigateToDispensedPage)
     .catch(reddenForm);
 }
 
@@ -27,8 +27,8 @@ function retrieveResponseContent(response) {
     }
 }
 
-function navigateToDispensedPage(amount) {
-    window.location.href = `${selfEndpoint}/dispensed?amount=${amount}`;
+function navigateToDispensedPage(response) {
+    window.location.href = `${selfEndpoint}/dispensed?amount=${response.amount}`;
 }
 
 function reddenForm(errMsg) {

@@ -23,9 +23,9 @@ app.get('/validate', [
 app.get('/dispensed', (req, res) => {
     // for now it only returns response
     // will have to generate some template-html here
-    const backendEndpoint = 'http://127.0.0.1:5000/dispense/';
+    const backendEndpoint = 'http://127.0.0.1:5000/dispense';
     const amountToDispense = req.query.amount;
-    fetch(`${env.backendEndpoint}?amount=${amountToDispense}`)
+    fetch(`${backendEndpoint}?amount=${amountToDispense}`)
     .then(backendResponse => {
         res.status(backendResponse.status);
         return backendResponse.text();
