@@ -21,7 +21,7 @@ function getRequestedAmount() {
 
 function retrieveResponseContent(response) {
     if (response.ok) {
-        return response.text();
+        return response.json();
     } else {
         return response.text().then(err => Promise.reject(err));
     }

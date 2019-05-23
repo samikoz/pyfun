@@ -23,16 +23,28 @@ app.get('/validate', [
 app.get('/dispensed', (req, res) => {
     // for now it only returns response
     // will have to generate some template-html here
-    const backendEndpoint = 'http://127.0.0.1:5000/dispense';
+    const backendEndpoint = 'http://0.0.0.0:5000/dispense';
     const amountToDispense = req.query.amount;
-    fetch(`${backendEndpoint}?amount=${amountToDispense}`)
+    fetch(`${backendEndpoint}?amount=${amountToDispense}`, {
+        'headers': {
+            'Accept': 'text/html,application/xhtml+xm…plication/xml;q=0.9,*/*;q=0.8',
+            'Accept-Encoding': 'gzip,deflate',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Connection': 'keep-alive',
+            'Host': 'localhost:5000',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0'
+        }
+    })
     .then(backendResponse => {
         res.status(backendResponse.status);
         return backendResponse.text();
     })
     .then(responseText => res.send(responseText))
-    .catch(err => console.log(`Error:  + ${err}`));
-    // catch - test with non-working backend & failed response
+    .catch(err => res.send(err));
+    // catch - test with non-working backend
+    // error template here - could not connect to the dispensing module
+    // and below the exact details
 });
 
 app.listen(port);
