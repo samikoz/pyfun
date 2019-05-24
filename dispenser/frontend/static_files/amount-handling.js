@@ -1,7 +1,7 @@
 const selfEndpoint = 'http://localhost:8000';
 
-const send_button = document.getElementById('send_button');
-send_button.addEventListener('click', dispenseRequestedAmount);
+const send_button = document.getElementById('dispense_form');
+send_button.addEventListener('submit', dispenseRequestedAmount);
 
 function dispenseRequestedAmount() {
     validate(getRequestedAmount())

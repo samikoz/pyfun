@@ -1,3 +1,16 @@
+#frontpage {
+    margin-top: 50px;
+    text-align: center;
+}
+
+#requested_amount {
+    width: 8em;
+}
+
+#send_button {
+    width: 10em;
+}
+
 .transitionable {
     -webkit-transition: background-color 2s ease;
     -moz-transition: background-color 2s ease;
