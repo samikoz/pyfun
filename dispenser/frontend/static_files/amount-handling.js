@@ -5,14 +5,15 @@ send_button.addEventListener('submit', dispenseRequestedAmount);
 
 function dispenseRequestedAmount() {
     validate(getRequestedAmount())
-    .then(navigateToDispensedPage)
-    .catch(reddenForm);
+    // .then(navigateToDispensedPage)
+    // .catch(reddenForm);
 }
 
 function validate(amount) {
     const validationEndpoint = `${selfEndpoint}/validate`;
-    return fetch(`${validationEndpoint}?amount=${amount}`)
-    .then(retrieveResponseContent);
+    console.log('aaaa');
+    // return fetch(`${validationEndpoint}?amount=${amount}`)
+    // .then(retrieveResponseContent);
 }
 
 function getRequestedAmount() {
@@ -20,6 +21,7 @@ function getRequestedAmount() {
 }
 
 function retrieveResponseContent(response) {
+    console.log(response);
     if (response.ok) {
         return response.json();
     } else {

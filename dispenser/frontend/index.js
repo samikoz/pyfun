@@ -13,13 +13,17 @@ app.get('/validate', [
     check('amount').isFloat({min: 0, locale: 'en-GB'})
 ], (req, res) => {
     let errors = validationResult(req);
+    // make index.html into a template
+    // the same as it is now but with a field to invoke reddenForm method
+    // normally the template is rendered without it
+    // unless it's rendered from inside here
     if (! errors.isEmpty()) {
         return res.status(422).json({
             amount: req.query.amount,
             errors: errors.array()
         });
     }
-    res.status(200).json({amount: req.query.amount});
+    res.redirect(`/dispensed?amount=${req.query.amount}`);
 });
 
 app.get('/dispensed', (req, res) => {
