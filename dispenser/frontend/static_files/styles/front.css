@@ -4,6 +4,10 @@
 }
 
 #requested_amount {
+    border-radius: 5px;
+    padding: 8px;
+    border-width: 1px;
+    border-color: black;
     width: 8em;
 }
 
@@ -12,8 +16,6 @@
 }
 
 .transitionable {
-    -webkit-transition: background-color 2s ease;
-    -moz-transition: background-color 2s ease;
-    -o-transition: background-color 2s ease;
-    transition: background-color 2s ease;
+    background-color: red;
+    transition: background-color 5s ease-in;
 }

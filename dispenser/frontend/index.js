@@ -12,18 +12,15 @@ app.use(express.static('static_files'));
 app.get('/validate', [
     check('amount').isFloat({min: 0, locale: 'en-GB'})
 ], (req, res) => {
-    let errors = validationResult(req);
-    // make index.html into a template
-    // the same as it is now but with a field to invoke reddenForm method
-    // normally the template is rendered without it
-    // unless it's rendered from inside here
+    const errorFormatter = ({ location, msg, param, value, nestedErrors }) =>
+        `Invalid amount: ${value}. Need a positive number with a dot as a decimal separator.`;
+    const errors = validationResult(req).formatWith(errorFormatter);
     if (! errors.isEmpty()) {
-        return res.status(422).json({
-            amount: req.query.amount,
-            errors: errors.array()
+        return res.render('failed-validation', {
+            errorMessage: errors.array().toString()
         });
     }
-    res.redirect(`/dispensed?amount=${req.query.amount}`);
+    return res.redirect(`/dispensed?amount=${req.query.amount}`);
 });
 
 app.get('/dispensed', (req, res) => {

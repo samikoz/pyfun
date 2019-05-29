@@ -8,10 +8,16 @@
 <body>
     <div id='frontpage'>
         <p>Specify the amount you'd wish to dispense</p>
+        <p style='font-style: italic;'>{errorMessage}</p>
         <form id='dispense_form' action='/validate'>
-            <input type='text' name='amount' id='requested_amount'>
+            <input type='text' name='amount' id='requested_amount' class='transitionable'>
             <input type='submit' id='send_button' value='Dispense' style='margin-top: 0.5em;'>
         </form>
     </div>
+
+    <script type='text/javascript'>
+        inputField = document.getElementById('requested_amount');
+        inputField.style['background-color'] = 'white';
+    </script>
 </body>
 </html>
