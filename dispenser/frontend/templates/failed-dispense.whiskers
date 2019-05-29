@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dispensing failure</title>
+    <link rel='stylesheet' type='text/css' href='styles/fail.css'>
+</head>
+<body>
+    <p class='fail-message'>Sorry, the server gone nuts while dispensing</p>
+    <p class='fail-message' id="error-message">{errorMessage}</p>
+</body>
+</html>

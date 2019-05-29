@@ -1,0 +1,11 @@
+#failpage {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.fail-message {
+}
+
+#error-message {
+    font-style: italic;
+}
