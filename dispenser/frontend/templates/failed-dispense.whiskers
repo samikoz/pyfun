@@ -6,7 +6,7 @@
     <link rel='stylesheet' type='text/css' href='styles/response.css'>
 </head>
 <body><div id='response-page'>
-    <p class='message'>Sorry, the server gone nuts while dispensing</p>
+    <p class='message'>Sorry, there was an error while dispensing</p>
     <p class='message error'>{errorMessage}</p>
 </div></body>
 </html>

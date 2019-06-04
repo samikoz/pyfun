@@ -28,10 +28,17 @@ app.get('/dispense', (req, res) => {
     const dispenseEndpoint = process.env.DISPENSE_ENDPOINT;
     fetch(`${dispenseEndpoint}?amount=${amountToDispense}`)
     .then(backendResponse => {
-        res.status(backendResponse.status);
-        return backendResponse.text();
+        return Promise.all([backendResponse.text(), Promise.resolve(backendResponse.status)]);
     })
-    .then(notes => res.render('dispensed', {dispensedNotes: notes.replace(/^\[|\]$/g, '')}))
+    .then(textWithStatusCode => {
+        [text, statusCode] = textWithStatusCode;
+        if (statusCode.toString().startsWith('2')) {
+            res.status(statusCode);
+            res.render('dispensed', {dispensedNotes: text.replace(/^\[|\]$/g, '')});
+        } else {
+            return Promise.reject(text);
+        }
+    })
     .catch(requestError => {
         fetch('http://localhost:8000/dispense-error', {
             headers: {

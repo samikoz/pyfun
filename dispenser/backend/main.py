@@ -18,4 +18,7 @@ dispenser = SingleCurrencyDispenser({
 @app.route('/dispense')
 def dispense():
     amount: float = float(request.args['amount'])
-    return str(dispenser.dispense(amount))
+    try:
+        return str(dispenser.dispense(amount))
+    except ValueError as e:
+        return (e.args[0], 500, ())
