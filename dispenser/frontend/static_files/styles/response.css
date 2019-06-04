@@ -1,11 +1,11 @@
-#failpage {
+#response-page {
     margin-top: 50px;
     text-align: center;
 }
 
-.fail-message {
+.message {
 }
 
-#error-message {
+.error {
     font-style: italic;
 }

@@ -20,12 +20,10 @@ app.get('/validate', [
             errorMessage: errors.array().toString()
         });
     }
-    return res.redirect(`/dispensed?amount=${req.query.amount}`);
+    return res.redirect(`/dispense?amount=${req.query.amount}`);
 });
 
-app.get('/dispensed', (req, res) => {
-    // for now it only returns response
-    // will have to generate some template-html here
+app.get('/dispense', (req, res) => {
     const amountToDispense = req.query.amount;
     const dispenseEndpoint = process.env.DISPENSE_ENDPOINT;
     fetch(`${dispenseEndpoint}?amount=${amountToDispense}`)
@@ -33,7 +31,7 @@ app.get('/dispensed', (req, res) => {
         res.status(backendResponse.status);
         return backendResponse.text();
     })
-    .then(res.send.bind(res)) // https://stackoverflow.com/questions/41801723/express-js-cannot-read-property-req-of-undefined
+    .then(notes => res.render('dispensed', {dispensedNotes: notes.replace(/^\[|\]$/g, '')}))
     .catch(requestError => {
         fetch('http://localhost:8000/dispense-error', {
             headers: {
@@ -41,7 +39,7 @@ app.get('/dispensed', (req, res) => {
             }
         })
         .then(errorResponse => errorResponse.text())
-        .then(res.send.bind(res));
+        .then(res.send.bind(res)); // https://stackoverflow.com/questions/41801723/express-js-cannot-read-property-req-of-undefined
     });
 });
 
