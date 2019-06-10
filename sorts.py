@@ -1,9 +1,8 @@
 import abc
 
 
-class Sort(metaclass=abc.ABCMeta):
-    def __init__(self, a_compare_method):
-        # TODO default compare method
+class Sorter(metaclass=abc.ABCMeta):
+    def __init__(self, a_compare_method=lambda x, y: x < y):
         self.compare = a_compare_method
 
     @abc.abstractmethod
@@ -11,10 +10,8 @@ class Sort(metaclass=abc.ABCMeta):
         return arr
 
 
-class Mergesort(Sort):
-    # TODO unstatify
-    @staticmethod
-    def merge_sorted(arr1, arr2, compare):
+class MergeSorter(Sorter):
+    def merge_sorted(self, arr1, arr2):
         """TODO base on iterators rather that mutators."""
         arr1, arr2 = list(arr1).copy(), list(arr2).copy()
 
@@ -25,7 +22,7 @@ class Mergesort(Sort):
         try:
             while True:
                 deleted = ''
-                if compare(a, b):
+                if self.compare(a, b):
                     merged.append(a)
                     deleted = 'a'
                     a = arr1.pop(0)
@@ -42,11 +39,10 @@ class Mergesort(Sort):
         return arr if length == 1 else self.merge_sorted(
             self.sort(arr[:length // 2]),
             self.sort(arr[length // 2:]),
-            self.compare
         )
 
 
-class Bubblesort(Sort):
+class BubbleSorter(Sorter):
     def sort(self, arr):
         try:
             while True:
