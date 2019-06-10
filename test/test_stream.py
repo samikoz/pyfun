@@ -74,6 +74,10 @@ class TestStream:
     def test_min(self, iterable):
         assert Stream(iterable).min() == min(list(iterable))
 
+    def test_min_empty(self):
+        assert Stream([]).min() is None
+        assert Stream([]).min(5) == 5
+
     @pytest.mark.parametrize('iterable,condition,benchmark', [
         (range(10), lambda x: x > 5, 6),
     ])

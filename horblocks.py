@@ -4,7 +4,9 @@ import itertools
 
 
 def split(array, separator=None):
-    """empty subarrays not returned."""
+    """splits an array into subarrays separated by a separator.
+    empty subarrays not returned."""
+
     count = array.count(separator)
     char_indices = []
     offset = -1

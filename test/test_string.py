@@ -3,7 +3,7 @@ import pytest
 import fun_string
 
 
-class TestStringMethods:
+class TestFunString:
 
     @pytest.mark.parametrize('word,first_unique', [
         ('mama', False),
@@ -18,8 +18,8 @@ class TestStringMethods:
         ('mama', [1, 3]),
         ('aantyapeaalaaa', [0, 1, 5, 8, 9, 11, 12, 13])
     ])
-    def test_indices(self, astring, positions):
-        assert fun_string.indices('a', astring) == positions
+    def test_get_indices(self, astring, positions):
+        assert fun_string.get_indices('a', astring) == positions
 
     @pytest.mark.parametrize('string,min_dist', [
         ('aabbccdd', 1),

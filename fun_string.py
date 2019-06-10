@@ -1,6 +1,8 @@
 import itertools
 import operator
 
+from stream import Stream
+
 
 def first_unique_char(word):
     """find the first non-repeating letter of a word or False."""
@@ -13,31 +15,21 @@ def first_unique_char(word):
         return False
 
 
-# TODO do some benchmarking for most efficient option
-def indices(char, string):
+def get_indices(char, string):
     """gets all positions of a char in a string."""
     return [x-1 for x in itertools.accumulate(
-        len(substr)+1 for substr in string.split(char)[:-1]
+        len(substring)+1 for substring in string.split(char)[:-1]
     )]
 
 
 def repeated_min_distance(string):
     """minimal distance between repeated letters or -1."""
-    return min(
-        list(filter(lambda x: x > -1, [
-            min(
-                list(map(
-                    lambda x: operator.sub(x[1], x[0]), zip(
-                        indices(unique_char, string)[:-1],
-                        indices(unique_char, string)[1:]
-                    )
-                )),
-                default=-1
-            )
-            for unique_char in set(string)
-        ])),
-        default=-1
-    )
+    return Stream(set(string)).map(
+        lambda char: Stream(get_indices(char, string))
+        .pair_consecutive()
+        .map(lambda pair: operator.sub(pair[0], pair[1]))
+        .min(-1)
+    ).filter(lambda x: x > -1).min(-1)
 
 
 class NotPermutation(Exception):

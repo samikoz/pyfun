@@ -37,11 +37,17 @@ class Stream:
     def chain(self, other):
         return Stream(itertools.chain(self.__iterable, other))
 
-    def min(self):
-        return self.accumulate(min).to_list().pop()
+    def min(self, default=None):
+        try:
+            return self.accumulate(min).to_list().pop()
+        except IndexError:
+            return default
 
-    def max(self):
-        return self.accumulate(max).to_list().pop()
+    def max(self, default=None):
+        try:
+            return self.accumulate(max).to_list().pop()
+        except IndexError:
+            return default
 
     def shift(self):
         return next(self.__iterable)
