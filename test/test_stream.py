@@ -8,17 +8,17 @@ from stream import Stream
 
 class TestStream:
 
-    iters = (
+    test_iterables = (
         range(10),
         [1, -1, 1, -1, 1],
         'abcd',
     )
 
-    @pytest.mark.parametrize('iterable', iters)
+    @pytest.mark.parametrize('iterable', test_iterables)
     def test_equality(self, iterable):
         assert Stream(iterable) == Stream(iterable)
 
-    @pytest.mark.parametrize('iterable', iters)
+    @pytest.mark.parametrize('iterable', test_iterables)
     @pytest.mark.parametrize('unary_func', [
         lambda x: 3 * x, lambda x: (x,)
     ])
@@ -29,7 +29,7 @@ class TestStream:
             list(map(unary_func, iterable))
         )
 
-    @pytest.mark.parametrize('iterable', iters)
+    @pytest.mark.parametrize('iterable', test_iterables)
     @pytest.mark.parametrize('binary_func', [
         operator.add, lambda x, y: 2 * x + y
     ])
@@ -40,21 +40,21 @@ class TestStream:
             functools.reduce(binary_func, iterable)
         )
 
-    @pytest.mark.parametrize('iterable', iters)
-    @pytest.mark.parametrize('afilter', [
+    @pytest.mark.parametrize('iterable', test_iterables)
+    @pytest.mark.parametrize('a_filter', [
         lambda x: x + x > x, lambda x: not x
     ])
-    def test_filter(self, afilter, iterable):
+    def test_filter(self, a_filter, iterable):
         assert (
-            Stream(iterable).filter(afilter).to_list()
+            Stream(iterable).filter(a_filter).to_list()
             ==
-            list(filter(afilter, iterable))
+            list(filter(a_filter, iterable))
         )
 
-    @pytest.mark.parametrize('iterable', iters)
-    def test_pair_conseq(self, iterable):
+    @pytest.mark.parametrize('iterable', test_iterables)
+    def test_pair_consecutive(self, iterable):
         assert (
-            Stream(iterable).pair_conseq().to_list()
+            Stream(iterable).pair_consecutive().to_list()
             ==
             list(zip(iterable[1:], iterable[:-1]))
         )
@@ -70,7 +70,7 @@ class TestStream:
             list(itertools.chain(first, second))
         )
 
-    @pytest.mark.parametrize('iterable', iters)
+    @pytest.mark.parametrize('iterable', test_iterables)
     def test_min(self, iterable):
         assert Stream(iterable).min() == min(list(iterable))
 
@@ -79,3 +79,14 @@ class TestStream:
     ])
     def test_first(self, iterable, condition, benchmark):
         assert Stream(iterable).first(condition) == benchmark
+
+    @pytest.mark.parametrize('iterable', test_iterables)
+    @pytest.mark.parametrize('binary_func', [
+        operator.add, lambda x, y: 2*x + y
+    ])
+    def test_accumulate(self, iterable, binary_func):
+        assert (
+            Stream(iterable).accumulate(binary_func).to_list()
+            ==
+            list(itertools.accumulate(iterable, binary_func))
+        )

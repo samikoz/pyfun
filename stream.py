@@ -3,6 +3,8 @@ import functools
 
 
 class Stream:
+    """a wrapper around an iterable with useful methods for functional solutions"""
+
     def __init__(self, an_iterable):
         self.__iterable = iter(an_iterable)
 
@@ -17,14 +19,16 @@ class Stream:
     def map(self, f):
         return Stream(map(f, self.__iterable))
 
+    def accumulate(self, f):
+        return Stream(itertools.accumulate(self.__iterable, f))
+
     def reduce(self, f):
         return functools.reduce(f, self.__iterable)
 
     def filter(self, fil):
         return Stream(filter(fil, self.__iterable))
 
-    def pair_conseq(self):
-        # TODO reimplement without assignments
+    def pair_consecutive(self):
         front, back = itertools.tee(self.__iterable)
         next(front)
 
@@ -34,11 +38,10 @@ class Stream:
         return Stream(itertools.chain(self.__iterable, other))
 
     def min(self):
-        # TODO reimplement this and below with accumulate
-        return min(list(self.__iterable))
+        return self.accumulate(min).to_list().pop()
 
     def max(self):
-        return max(list(self.__iterable))
+        return self.accumulate(max).to_list().pop()
 
     def shift(self):
         return next(self.__iterable)
@@ -48,6 +51,3 @@ class Stream:
             lambda x: not condition(x),
             self.__iterable)
         )
-
-    def accumulate(self):
-        pass
