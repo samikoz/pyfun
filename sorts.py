@@ -12,26 +12,32 @@ class Sorter(metaclass=abc.ABCMeta):
 
 class MergeSorter(Sorter):
     def merge_sorted(self, arr1, arr2):
-        """TODO base on iterators rather that mutators."""
-        arr1, arr2 = list(arr1).copy(), list(arr2).copy()
-
+        iter1, iter2 = iter(arr1), iter(arr2)
         merged = []
-        a = arr1.pop(0)
-        b = arr2.pop(0)
-        deleted = ''
+
+        try:
+            a = next(iter1)
+        except StopIteration:
+            return arr2
+        try:
+            b = next(iter2)
+        except StopIteration:
+            return arr1
+
+        delete_trial = ''
         try:
             while True:
-                deleted = ''
+                delete_trial = ''
                 if self.compare(a, b):
                     merged.append(a)
-                    deleted = 'a'
-                    a = arr1.pop(0)
+                    delete_trial = 'a'
+                    a = next(iter1)
                 else:
                     merged.append(b)
-                    deleted = 'b'
-                    b = arr2.pop(0)
-        except IndexError:
-            merged.extend([b] + arr2 if deleted == 'a' else [a] + arr1)
+                    delete_trial = 'b'
+                    b = next(iter2)
+        except StopIteration:
+            merged.extend([b] + list(iter2) if delete_trial == 'a' else [a] + list(iter1))
         return merged
 
     def sort(self, arr):

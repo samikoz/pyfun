@@ -28,7 +28,6 @@ class TestSorts:
             merged
         )
 
-    @pytest.mark.xfail
     @pytest.mark.parametrize('sorteda,sortedb,merged', [
         ([], [4, 7, 10], [4, 7, 10]),
         ([1, 2, 10], [], [1, 2, 10]),
