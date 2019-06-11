@@ -16,14 +16,14 @@ def first_unique_char(word):
 
 
 def get_indices(char, string):
-    """gets all positions of a char in a string."""
+    """gets all positions of a char in a string. functional."""
     return [x-1 for x in itertools.accumulate(
         len(substring)+1 for substring in string.split(char)[:-1]
     )]
 
 
 def repeated_min_distance(string):
-    """minimal distance between repeated letters or -1."""
+    """minimal distance between repeated letters or -1. functional."""
     return Stream(set(string)).map(
         lambda char: Stream(get_indices(char, string))
         .pair_consecutive()
