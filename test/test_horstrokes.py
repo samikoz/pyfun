@@ -1,9 +1,9 @@
 import pytest
 
-from horblocks import noofblocks, split
+from horstrokes import no_of_horizontal_strokes, split
 
 
-class TestHorblocks:
+class TestHorStrokes:
 
     @pytest.mark.parametrize('splittee,sep,splitted', [
         ((1, 2, 3, 4, 5, 6), 3, [(1, 2), (4, 5, 6)]),
@@ -24,5 +24,5 @@ class TestHorblocks:
         ((5, 2, 7), 10),
         ((5, 3, 1, 8, 3, 6), 15),
     ])
-    def test_horblocks(self, blocks, strokes):
-        assert noofblocks(blocks) == strokes
+    def test_no_of_horizontal_strokes(self, blocks, strokes):
+        assert no_of_horizontal_strokes(blocks) == strokes

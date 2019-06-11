@@ -5,7 +5,7 @@ import itertools
 
 def split(array, separator=None):
     """splits an array into subarrays separated by a separator.
-    empty subarrays not returned."""
+    empty subarrays are not returned."""
 
     count = array.count(separator)
     char_indices = []
@@ -22,16 +22,14 @@ def split(array, separator=None):
     return splits
 
 
-def noofblocks(heights):
-    """Let heights be an array of positive integers
-    describing heights of uniform-width rectangles placed one-by-one.
-    Imagine we are painting the rectangles horizontally with single strokes,
-    the height of the brush is 1. noofblocks computes the minimal
-    number of strokes needed to paint the rectangles."""
+def no_of_horizontal_strokes(heights):
+    """let heights be an array of positive integers describing heights of uniform-width rectangles placed one-by-one.
+    imagine we are painting the rectangles horizontally with single strokes, the height of the brush is 1.
+    the function computes the minimal number of strokes needed to paint the rectangles."""
 
     strokes = min(heights)
     heights = [x - strokes for x in heights]
     for subarray in split(heights, 0):
-        strokes += noofblocks(subarray)
+        strokes += no_of_horizontal_strokes(subarray)
 
     return strokes
