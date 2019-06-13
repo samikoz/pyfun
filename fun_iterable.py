@@ -27,3 +27,10 @@ def max_non_overlapping_sum(array, k):
         return computed[i]
 
     return compute_for_subarray_above(0)
+
+
+def ways_to_subaverage(array, k):
+    """for an integer array return number of ways to select a subarray
+    whose elements average to a given k"""
+    # https://www.geeksforgeeks.org/number-of-ways-to-choose-elements-from-the-array-such-that-their-average-is-k/
+    pass
