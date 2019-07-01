@@ -1,9 +1,4 @@
 import itertools
-from collections import deque
-
-
-def last_element(iterable):
-    return deque(iterable, maxlen=1).pop()
 
 
 def max_non_overlapping_sum(array, k):
@@ -30,7 +25,7 @@ def max_non_overlapping_sum(array, k):
 
 
 def ways_to_subaverage(array, k):
-    """for an integer array return number of ways to select a subarray whose elements average to a given k.
+    """for an integer array return number of ways to select a subset whose elements average to a given k.
     dynamic programming."""
 
     dynamic_storage = [[[-1 for s in range(sum(array) + 1)] for n in range(len(array))] for i in range(len(array))]
@@ -51,3 +46,9 @@ def ways_to_subaverage(array, k):
             return dynamic_storage[index][no_of_elements][sum_so_far]
 
     return recursive_step(len(array) - 1, 0, 0)
+
+
+def find_subarray_divisible_by_size(array):
+    """check whether exists a subarray whose sum is divisible by the size of the original array.
+    returns any and -1 if no such exists."""
+    # https://www.geeksforgeeks.org/find-a-subarray-whose-sum-is-divisible-by-size-of-the-array/
