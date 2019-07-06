@@ -1,6 +1,6 @@
 import pytest
 
-from fun_iterable import last_element, max_non_overlapping_sum, ways_to_subaverage
+from fun_iterable import last_element
 
 
 class TestFunIterable:

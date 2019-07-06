@@ -1,8 +1,8 @@
 import pytest
 
-from intarray.max_non_overlapping_sum import max_non_overlapping_sum
-from intarray.ways_to_subaverage import ways_to_subaverage
-from intarray.subarray_divisible_by_size import find_divisible_subarray_by_differing_simple_subarrays, \
+from fun_intarray.max_non_overlapping_sum import max_non_overlapping_sum
+from fun_intarray.ways_to_subaverage import ways_to_subaverage
+from fun_intarray.subarray_divisible_by_size import find_divisible_subarray_by_differing_simple_subarrays, \
     find_divisible_subarray_by_iterating_fore_and_aft, find_divisible_subarray_by_pigeonhole_principle
 
 
