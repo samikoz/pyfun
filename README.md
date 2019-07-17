@@ -6,8 +6,10 @@ contains implementations of sorting algorithms
 * [horblocks.py](https://github.com/samikoz/pyfun/blob/master/horblocks.py) 
 contains a solution to a specific problem described within
 * [fun_intarray](https://github.com/samikoz/pyfun/tree/master/fun_intarray)
-solutions unrelated problems concerning integer arrays
+solutions to unrelated problems concerning integer arrays
 * [fun_string](https://github.com/samikoz/pyfun/tree/master/fun_string)
-solutions unrelated problems concerning strings
+solutions to unrelated problems concerning strings
 * [fun_iterable](https://github.com/samikoz/pyfun/blob/master/fun_iterable.py)
 a clever and light way to get the last element from an iterable
+* [fun_counting](https://github.com/samikoz/pyfun/blob/master/fun_counting.py)
+solutions relating to counting problems
