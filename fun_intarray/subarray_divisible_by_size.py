@@ -46,12 +46,10 @@ def find_divisible_subarray_by_pigeonhole_principle(array):
     ether one of them is divisible by len(array) and we're done or two repeated in which case the difference works.
     it's clear here that -1 is never obtained."""
     length = len(array)
-    simple_subarray_modulos = []
     modulos_to_indices = {}
     for upper_bound in range(1, len(array)+1):
         current_remainder = sum(array[:upper_bound]) % length
-        simple_subarray_modulos.append(current_remainder)
-        if simple_subarray_modulos[-1] == 0:
+        if current_remainder == 0:
             return array[:upper_bound]
 
         if modulos_to_indices.get(current_remainder, -1) > -1:
