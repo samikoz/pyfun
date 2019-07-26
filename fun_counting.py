@@ -10,9 +10,9 @@ def count_bounded_integers_with_digits_from_set(sorted_digits, bound, length):
         sum_so_far = 0
         position = 1
         for index in coinciding_indices:
-            sum_so_far += index * number_of_possible_digits**(length - position)
+            sum_so_far += (index if 0 not in sorted_digits or position > 1 else index - 1) * number_of_possible_digits**(length - position)
             position += 1
-        return sum_so_far + (first_smaller_index + 1) * number_of_possible_digits**(length - position)
+        return sum_so_far + (first_smaller_index + 1 if 0 not in sorted_digits or position > 1 else first_smaller_index) * number_of_possible_digits**(length - position)
 
     bound_digits = [int(d) for d in str(bound)]
     if bound < sorted_digits[0]*10**(length-1):
