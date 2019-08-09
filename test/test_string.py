@@ -3,6 +3,7 @@ import pytest
 from fun_string.find_unique_char import first_unique_char
 from fun_string.repeated_min_distance import get_indices, repeated_min_distance
 from fun_string.contains_permutation import is_permutation, NotPermutation, contains_permutation
+from fun_string.squash_consecutive import squash_consecutive
 
 
 class TestFirstUniqueChar:
@@ -76,3 +77,17 @@ class TestContainsPermutation:
             ==
             -1
         )
+
+
+class TestSquashConsecutive:
+    def test_no_repetitions(self):
+        assert squash_consecutive('abcd') == [('a', 1), ('b', 1), ('c', 1), ('d', 1)]
+
+    def test_non_repeated_repetitions(self):
+        assert squash_consecutive('aabccdddd') == [('a', 2), ('b', 1), ('c', 2), ('d', 4)]
+
+    def test_repeated_repetitions(self):
+        assert squash_consecutive('aabaaaca') == [('a', 2), ('b', 1), ('a', 3), ('c', 1), ('a', 1)]
+
+    def test_empty_string(self):
+        assert squash_consecutive('') == []
