@@ -22,8 +22,8 @@ class Stream:
     def accumulate(self, f):
         return Stream(itertools.accumulate(self.__iterable, f))
 
-    def reduce(self, f):
-        return functools.reduce(f, self.__iterable)
+    def reduce(self, f, default=None):
+        return functools.reduce(f, self.__iterable, default) if default else functools.reduce(f, self.__iterable)
 
     def filter(self, fil):
         return Stream(filter(fil, self.__iterable))
