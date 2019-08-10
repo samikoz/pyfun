@@ -40,6 +40,9 @@ class TestStream:
             functools.reduce(binary_func, iterable)
         )
 
+    def test_reduce_with_default(self):
+        assert Stream(range(2, 5)).reduce(operator.add, 1) == 10
+
     @pytest.mark.parametrize('iterable', test_iterables)
     @pytest.mark.parametrize('a_filter', [
         lambda x: x + x > x, lambda x: not x
@@ -94,3 +97,9 @@ class TestStream:
             ==
             list(itertools.accumulate(iterable, binary_func))
         )
+
+    def test_accumulate_with_default(self):
+        assert None
+
+    def test_dropwhile(self):
+        assert Stream(range(2, 5)).accumulate(operator.add, 1).to_list() == [1, 3, 6, 10]

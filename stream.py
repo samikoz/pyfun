@@ -19,8 +19,8 @@ class Stream:
     def map(self, f):
         return Stream(map(f, self.__iterable))
 
-    def accumulate(self, f):
-        return Stream(itertools.accumulate(self.__iterable, f))
+    def accumulate(self, f, default=None):
+        return Stream(itertools.accumulate(itertools.chain([default], self.__iterable) if default else self.__iterable, f))
 
     def reduce(self, f, default=None):
         return functools.reduce(f, self.__iterable, default) if default else functools.reduce(f, self.__iterable)
