@@ -43,6 +43,9 @@ class TestStream:
     def test_reduce_with_default(self):
         assert Stream(range(2, 5)).reduce(operator.add, 1) == 10
 
+    def test_reduce_with_default_none(self):
+        assert Stream([0, 1]).reduce(lambda acc, x: (acc, x), None) == ((None, 0), 1)
+
     @pytest.mark.parametrize('iterable', test_iterables)
     @pytest.mark.parametrize('a_filter', [
         lambda x: x + x > x, lambda x: not x
@@ -99,7 +102,14 @@ class TestStream:
         )
 
     def test_accumulate_with_default(self):
-        assert Stream(list(range(10))).dropwhile(lambda x: x < 5).to_list() == [5, 6, 7, 8, 9]
+        assert Stream(range(2, 5)).accumulate(operator.add, 1).to_list() == [1, 3, 6, 10]
+
+    def test_accumulate_with_default_none(self):
+        assert (
+            Stream(['a', 'b']).accumulate(lambda acc, x: (acc, x), None).to_list()
+            ==
+            [None, (None, 'a'), ((None, 'a'), 'b')]
+        )
 
     def test_dropwhile(self):
-        assert Stream(range(2, 5)).accumulate(operator.add, 1).to_list() == [1, 3, 6, 10]
+        assert Stream(list(range(10))).dropwhile(lambda x: x < 5).to_list() == [5, 6, 7, 8, 9]

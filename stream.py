@@ -1,9 +1,15 @@
 import itertools
 import functools
+from typing import Any
+
+
+class NoParameter:
+    pass
 
 
 class Stream:
     """a wrapper around an iterable with useful methods for functional solutions"""
+    # TODO in tests using Stream methods, monkeypatch them
 
     def __init__(self, an_iterable):
         self.__iterable = iter(an_iterable)
@@ -19,11 +25,15 @@ class Stream:
     def map(self, f):
         return Stream(map(f, self.__iterable))
 
-    def accumulate(self, f, default=None):
-        return Stream(itertools.accumulate(itertools.chain([default], self.__iterable) if default else self.__iterable, f))
+    def accumulate(self, f, default: Any = NoParameter()):
+        return Stream(itertools.accumulate(
+            self.__iterable if isinstance(default, NoParameter) else itertools.chain([default], self.__iterable),
+            f
+        ))
 
-    def reduce(self, f, default=None):
-        return functools.reduce(f, self.__iterable, default) if default else functools.reduce(f, self.__iterable)
+    def reduce(self, f, default: Any = NoParameter()):
+        return functools.reduce(f, self.__iterable) if isinstance(default, NoParameter) \
+            else functools.reduce(f, self.__iterable, default)
 
     def filter(self, fil):
         return Stream(filter(fil, self.__iterable))
