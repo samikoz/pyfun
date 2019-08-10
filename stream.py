@@ -29,10 +29,13 @@ class Stream:
         return Stream(filter(fil, self.__iterable))
 
     def pair_consecutive(self):
-        front, back = itertools.tee(self.__iterable)
-        next(front)
-
-        return Stream(zip(front, back))
+        return Stream(itertools.dropwhile(
+            lambda pair: pair[1] is None,
+            itertools.accumulate(
+                itertools.chain([(None, None)], self.__iterable),
+                lambda previous_pair, element: (element, previous_pair[0])
+            )
+        ))
 
     def chain(self, other):
         return Stream(itertools.chain(self.__iterable, other))
