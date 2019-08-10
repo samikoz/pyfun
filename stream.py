@@ -28,6 +28,9 @@ class Stream:
     def filter(self, fil):
         return Stream(filter(fil, self.__iterable))
 
+    def dropwhile(self, condition):
+        return Stream(itertools.dropwhile(condition, self.__iterable))
+
     def pair_consecutive(self):
         return Stream(itertools.dropwhile(
             lambda pair: pair[1] is None,

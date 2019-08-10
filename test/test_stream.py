@@ -99,7 +99,7 @@ class TestStream:
         )
 
     def test_accumulate_with_default(self):
-        assert None
+        assert Stream(list(range(10))).dropwhile(lambda x: x < 5).to_list() == [5, 6, 7, 8, 9]
 
     def test_dropwhile(self):
         assert Stream(range(2, 5)).accumulate(operator.add, 1).to_list() == [1, 3, 6, 10]
