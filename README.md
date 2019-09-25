@@ -5,6 +5,8 @@ wrapper for iterable for convenient functional programming
 contains implementations of sorting algorithms
 * [horblocks.py](https://github.com/samikoz/pyfun/blob/master/horblocks.py) 
 contains a solution to a specific problem described within
+* [river_stones](https://github.com/samikoz/pyfun/tree/master/river_stones)
+given distribution of circular stones on a river, can the water flow freely?
 * [fun_intarray](https://github.com/samikoz/pyfun/tree/master/fun_intarray)
 solutions to unrelated problems concerning integer arrays
 * [fun_string](https://github.com/samikoz/pyfun/tree/master/fun_string)
