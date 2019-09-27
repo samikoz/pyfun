@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import Sequence
 import math
 
 
@@ -15,8 +16,19 @@ class Point:
 class Circle:
     def __init__(self, coords: Point, radius: float) -> None:
         assert radius > 0
-        self.coords: Point = coords
+        self.coordinates: Point = coords
         self.radius: float = radius
 
     def is_adjacent(self, other: Circle) -> bool:
-        return self.coords.distance(other.coords) == self.radius + other.radius
+        return self._centre_distance(other) == self.radius + other.radius
+
+    def is_overlapping(self, other: Circle) -> bool:
+        return self._centre_distance(other) < self.radius + other.radius
+
+    def _centre_distance(self, other: Circle) -> float:
+        return self.coordinates.distance(other.coordinates)
+
+
+class Graph:
+    def __init__(self, neighbours: Sequence[Graph]) -> None:
+        self.neighbours: Sequence[Graph] = neighbours

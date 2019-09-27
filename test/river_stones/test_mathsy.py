@@ -23,3 +23,18 @@ class TestCircle:
         a = Circle(Point(0, 0), 2)
         b = Circle(Point(1, 1), 1)
         assert a.is_adjacent(b) is False
+
+    def test_is_overlapping_positive(self):
+        a = Circle(Point(0, 0), 2)
+        b = Circle(Point(1, 1), 1)
+        assert a.is_overlapping(b) is True
+
+    def test_is_overlapping_disjoint(self):
+        a = Circle(Point(-2, 0), 1)
+        b = Circle(Point(1, 3), 0.5)
+        assert a.is_overlapping(b) is False
+
+    def test_is_overlapping_adjacent(self):
+        a = Circle(Point(1, 1), 3)
+        b = Circle(Point(1, 7), 3)
+        assert a.is_overlapping(b) is False
