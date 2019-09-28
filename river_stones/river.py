@@ -10,12 +10,16 @@ class River:
     def __init__(self, height: int, stones: Sequence[Stone]):
         self.height: int = height
         self.stones: List[Stone] = []
+        self.top_stones: List[Stone] = []
+        self.bottom_stones: List[Stone] = []
 
         for stone in stones:
             self._assert_stone_within_river(stone)
             self._assert_stone_does_not_overlap(stone)
 
             self.stones.append(stone)
+            self._append_if_top(stone)
+            self._append_if_bottom(stone)
 
     def _assert_stone_within_river(self, stone: Stone):
         assert 0 <= stone.coordinates.y <= self.height
@@ -24,3 +28,11 @@ class River:
     def _assert_stone_does_not_overlap(self, stone: Stone):
         for placed_stone in self.stones:
             assert stone.is_overlapping(placed_stone) is False
+
+    def _append_if_top(self, stone: Stone) -> None:
+        if stone.coordinates.y + stone.radius >= self.height:
+            self.top_stones.append(stone)
+
+    def _append_if_bottom(self, stone: Stone) -> None:
+        if stone.coordinates.y - stone.radius <= 0:
+            self.bottom_stones.append(stone)
