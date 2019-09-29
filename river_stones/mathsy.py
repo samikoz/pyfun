@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Sequence, Any
+from typing import Any
 import math
 
 
@@ -40,8 +40,3 @@ class Circle:
 
     def _centre_distance(self, other: Circle) -> float:
         return self.coordinates.distance(other.coordinates)
-
-
-class Graph:
-    def __init__(self, neighbours: Sequence[Graph]) -> None:
-        self.neighbours: Sequence[Graph] = neighbours
