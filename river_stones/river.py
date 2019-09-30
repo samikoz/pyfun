@@ -36,3 +36,6 @@ class River:
     def _append_if_bottom(self, stone: Stone) -> None:
         if stone.coordinates.y - stone.radius <= 0:
             self.bottom_stones.append(stone)
+
+    def is_traversible(self) -> bool:
+        pass
