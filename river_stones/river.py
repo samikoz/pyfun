@@ -1,6 +1,7 @@
-from typing import Sequence, List
+from typing import Sequence, List, Set
 
 from river_stones.stone import Stone
+from river_stones.mathsy import ConnectedComponent
 
 
 class River:
@@ -38,4 +39,20 @@ class River:
             self.bottom_stones.append(stone)
 
     def is_traversible(self) -> bool:
-        pass
+        left_to_traverse: List[Stone] = self.stones
+        while len(left_to_traverse) > 0:
+            a_stone: Stone = left_to_traverse.pop(0)
+            connected_component = ConnectedComponent(a_stone, lambda stone1, stone2: stone1.is_adjacent(stone2))
+            connected_component.add(left_to_traverse)
+            if self._contains_top_and_bottom(connected_component.get()):
+                return False
+            left_to_traverse = self._remove_already_traversed(left_to_traverse, connected_component.get())
+
+        return True
+
+    def _contains_top_and_bottom(self, component: Set[Stone]) -> bool:
+        return len(component.intersection(self.top_stones)) > 0 and len(component.intersection(self.bottom_stones)) > 0
+
+    @staticmethod
+    def _remove_already_traversed(to_traverse: Sequence[Stone], already_traversed: Set[Stone]) -> List[Stone]:
+        return list(set(to_traverse).difference(already_traversed))
