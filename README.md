@@ -1,4 +1,6 @@
 # Pyfun
+* [golf](https://github.com/samikoz/pyfun/tree/master/golf)
+codegolf; solving problems with minimal source file
 * [stream.py](https://github.com/samikoz/pyfun/blob/master/stream.py) 
 wrapper for iterable for convenient functional programming
 * [sorts.py](https://github.com/samikoz/pyfun/blob/master/sorts.py) 
