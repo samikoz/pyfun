@@ -24,3 +24,11 @@ class TestGraphs:
     def test_adjacency(self):
         v: Graph.Vertex = self.graph.get_vertex(2)
         assert [neighbour.value for neighbour in v.neighbours()] == [0, 4]
+
+    def test_depth_first_traversal(self):
+        v: Graph.Vertex = self.graph.get_vertex(0)
+        assert self.graph.depth_first_traversal(v) == "035421"
+
+    def test_breadth_first_traversal(self):
+        v: Graph.Vertex = self.graph.get_vertex(0)
+        assert self.graph.breadth_first_traversal(v) == "012345"

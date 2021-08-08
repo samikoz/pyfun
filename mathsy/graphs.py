@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import List, Iterator
+from collections import deque
 import itertools
 
 
@@ -31,3 +32,29 @@ class Graph:
 
     def get_vertex(self, i: int) -> Vertex:
         return self._vertices[i]
+
+    @staticmethod
+    def depth_first_traversal(v: Vertex) -> str:
+        visited: List[Graph.Vertex] = []
+        to_traverse: List[Graph.Vertex] = [v]
+        while to_traverse:
+            v: Graph.Vertex = to_traverse.pop()
+            if v not in visited:
+                visited.append(v)
+                for n in v.neighbours():
+                    to_traverse.append(n)
+
+        return "".join(map(lambda vertex: str(vertex.value), visited))
+
+    @staticmethod
+    def breadth_first_traversal(v: Vertex) -> str:
+        visited: List[Graph.Vertex] = []
+        to_traverse: deque[Graph.Vertex] = deque([v])
+        while len(to_traverse):
+            v: Graph.Vertex = to_traverse.pop()
+            if v not in visited:
+                for n in v.neighbours():
+                    to_traverse.appendleft(n)
+                visited.append(v)
+
+        return "".join(map(lambda vertex: str(vertex.value), visited))
