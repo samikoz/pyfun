@@ -1,4 +1,6 @@
 # Pyfun
+* [mathsy](https://github.com/samikoz/pyfun/tree/master/mathsy)
+auxiliary mathematical objects  
 * [golf](https://github.com/samikoz/pyfun/tree/master/golf)
 codegolf; solving problems with minimal source file
 * [stream.py](https://github.com/samikoz/pyfun/blob/master/stream.py) 

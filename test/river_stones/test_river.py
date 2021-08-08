@@ -2,7 +2,7 @@ import pytest
 
 from river_stones.river import River
 from river_stones.stone import Stone
-from river_stones.mathsy import Point
+from mathsy.geometry import Point
 
 
 class TestRiver:

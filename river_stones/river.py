@@ -1,7 +1,7 @@
 from typing import Sequence, List, Set
 
 from river_stones.stone import Stone
-from river_stones.mathsy import ConnectedComponent
+from mathsy.topology import ConnectedComponent
 
 
 class River:

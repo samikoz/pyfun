@@ -1,4 +1,4 @@
-from river_stones.mathsy import Point, Circle
+from mathsy.geometry import Point, Circle
 
 
 class TestPoint:

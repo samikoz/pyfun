@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from river_stones.interfaces import ConnectableInterface
-from river_stones.mathsy import Circle
+from mathsy.geometry import Circle
 
 
 class Stone(ConnectableInterface, Circle):
