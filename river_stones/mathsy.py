@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-from typing import Any, Generic, TypeVar, Callable, List, Iterable, Set, Sequence
+from typing import Any, Generic, TypeVar, List, Set as SetType, Sequence, Iterator, AbstractSet
+from collections.abc import Set
 import math
+
+from river_stones.interfaces import ConnectableInterface
 
 
 class Point:
@@ -48,31 +51,42 @@ class Circle:
         return self.coordinates.distance(other.coordinates)
 
 
-T = TypeVar('T')
+C = TypeVar('C', bound=ConnectableInterface)
 
 
-class ConnectedComponent(Generic[T]):
-    def __init__(self, initial_member: T, connecting_method: Callable[[T, T], bool]) -> None:
-        self.component: List[T] = [initial_member]
-        self.is_connected: Callable[[T, T], bool] = connecting_method
+class ConnectedComponent(Generic[C], Set):
+    def __init__(self, initial_member: C) -> None:
+        self.component: SetType[C] = {initial_member}
 
-    def add(self, elements: Iterable[T]) -> None:
-        candidate_connectors: List[T] = list(elements)
+    def add(self, elements: SetType[C]) -> None:
+        component_elements: List[C] = list(self.component)
         component_index: int = 0
-        while component_index < len(self.component):
-            candidate_connectors: List[T] = self._extend_component_and_shrink_candidates_by_connectors(
-                self.component[component_index],
-                candidate_connectors
-            )
+        while component_index < len(component_elements):
+            connected: List[C] = self._get_all_connected(component_elements[component_index], elements)
+            component_elements.extend(connected)
+            elements = set(elements).difference(connected)
             component_index += 1
 
-    def _extend_component_and_shrink_candidates_by_connectors(self, connectee: T, candidates: Sequence[T]) -> List[T]:
-        connected: List[T] = self._get_all_connected(connectee, candidates)
-        self.component.extend(connected)
-        return list(set(candidates).difference(connected))
+        self.component = set(component_elements)
 
-    def _get_all_connected(self, connectee: T, candidates: Sequence[T]) -> List[T]:
-        return list(filter(lambda x: self.is_connected(connectee, x), candidates))
+    @staticmethod
+    def _get_all_connected(connectee: C, candidates: Sequence[C]) -> List[C]:
+        return list(filter(lambda x: connectee.is_connected(x), candidates))
 
-    def get(self) -> Set[T]:
-        return set(self.component)
+    def __iter__(self) -> Iterator[C]:
+        return iter(self.component)
+
+    def __len__(self) -> int:
+        return len(self.component)
+
+    def __contains__(self, x: object) -> bool:
+        return object in self.component
+
+    def intersection(self, s: AbstractSet[C]) -> AbstractSet:
+        return self.component.intersection(s)
+
+    def union(self, s: AbstractSet[C]) -> AbstractSet[C]:
+        return self.component.union(s)
+
+    def difference(self, s: AbstractSet[C]) -> AbstractSet[C]:
+        return self.component.difference(s)
