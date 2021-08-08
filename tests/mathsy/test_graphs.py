@@ -4,7 +4,7 @@ from mathsy.graphs import Graph
 
 
 class TestGraphs:
-    adjacency_matrix: List[List[bool]] = [
+    adjacency_matrix: List[List[float]] = [
         [0, 1, 0.5, 5, 0, 0],
         [1, 0, 0, 0, 0, 0],
         [0.5, 0, 0, 0, 2, 0],
@@ -19,11 +19,21 @@ class TestGraphs:
 
     def test_get_vertex(self):
         for i in range(6):
-            assert self.graph.get_vertex(i).value == i
+            assert self.graph.get_vertex(i).index == i
 
-    def test_adjacency(self):
+    def test_neighbours(self):
         v: Graph.Vertex = self.graph.get_vertex(2)
-        assert [neighbour.value for neighbour in v.neighbours()] == [0, 4]
+        assert [neighbour.index for neighbour in v.neighbours()] == [0, 4]
+
+    def test_adding_vertices(self):
+        g: Graph = Graph([])
+        g.add_vertex([0], 5.5)
+        g.add_vertex([1, 0], -1)
+        g.add_vertex([0, 1, 0], 0.5)
+
+        v: Graph.Vertex = g.get_vertex(2)
+        assert v.value == 0.5
+        assert list(v.neighbours()) == [g.get_vertex(1)]
 
     def test_depth_first_traversal(self):
         v: Graph.Vertex = self.graph.get_vertex(0)

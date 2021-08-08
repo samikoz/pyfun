@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Iterator, MutableMapping, Mapping, Optional, Set
+from typing import List, Iterator, MutableMapping, Mapping, Optional, Set, Any
 from collections import deque
 import itertools
 import math
@@ -10,36 +10,47 @@ class Graph:
     """defined by adjacency matrix. add weights instead of bools for a weighted graph."""
 
     class Vertex:
-        def __init__(self, graph: Graph, value: int) -> None:
-            self._graph = graph
-            self.value = value
+        def __init__(self, graph: Graph, index: int, value: Any) -> None:
+            self._graph: Graph = graph
+            self.index: int = index
+            self.value: Any = value
 
         def __repr__(self) -> str:
-            return f"Vertex({self.value})"
+            return f"Vertex({self.index})"
 
         def neighbours(self) -> Iterator[Graph.Vertex]:
-            adjacency: List[float] = self._graph._adjacencies[self.value]
+            adjacency: List[float] = self._graph._adjacencies[self.index]
             return (self._graph.get_vertex(i) for i in itertools.compress(range(self._graph.order()), adjacency))
 
-    def _create_vertex(self, value: int) -> Vertex:
-        return self.Vertex(self, value)
-
     def __init__(self, adjacency_matrix: List[List[float]]) -> None:
-        order: int = len(adjacency_matrix)
-        for adjacency in adjacency_matrix:
-            assert len(adjacency) == order
-
         self._adjacencies: List[List[float]] = adjacency_matrix
-        self._vertices: List[Graph.Vertex] = [self._create_vertex(i) for i in range(order)]
+        self._vertices: List[Graph.Vertex] = [self._create_vertex(i) for i in range(len(adjacency_matrix))]
 
-    def order(self) -> int:
-        return len(self._vertices)
+        self._validate_adjacency()
+
+    def _create_vertex(self, index: int, value: Any = None) -> Vertex:
+        return self.Vertex(self, index, value)
+
+    def _validate_adjacency(self) -> None:
+        order: int = self.order()
+        for adjacency in self._adjacencies:
+            assert len(adjacency) == order
 
     def get_vertex(self, i: int) -> Vertex:
         return self._vertices[i]
 
+    def add_vertex(self, adjacency: List[float], value: Any) -> None:
+        for index in range(self.order()):
+            self._adjacencies[index].append(adjacency[index])
+        self._adjacencies.append(adjacency)
+        self._vertices.append(self._create_vertex(self.order(), value))
+        self._validate_adjacency()
+
+    def order(self) -> int:
+        return len(self._vertices)
+
     def get_weight(self, v1: Vertex, v2: Vertex) -> float:
-        return self._adjacencies[v1.value][v2.value]
+        return self._adjacencies[v1.index][v2.index]
 
     @staticmethod
     def depth_first_traversal(v: Vertex) -> str:
@@ -52,7 +63,7 @@ class Graph:
                 for n in v.neighbours():
                     to_traverse.append(n)
 
-        return "".join(map(lambda vertex: str(vertex.value), visited))
+        return "".join(map(lambda vertex: str(vertex.index), visited))
 
     @staticmethod
     def breadth_first_traversal(v: Vertex) -> str:
@@ -65,7 +76,7 @@ class Graph:
                     to_traverse.appendleft(n)
                 visited.append(v)
 
-        return "".join(map(lambda vertex: str(vertex.value), visited))
+        return "".join(map(lambda vertex: str(vertex.index), visited))
 
     @staticmethod
     def _recreate_path(end: Vertex, previous: Mapping[Vertex, Vertex]) -> List[Vertex]:
