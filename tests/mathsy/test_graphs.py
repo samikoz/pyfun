@@ -5,11 +5,11 @@ from mathsy.graphs import Graph
 
 class TestGraphs:
     adjacency_matrix: List[List[bool]] = [
-        [0, 1, 1, 1, 0, 0],
+        [0, 1, 0.5, 5, 0, 0],
         [1, 0, 0, 0, 0, 0],
-        [1, 0, 0, 0, 1, 0],
-        [1, 0, 0, 0, 1, 1],
-        [0, 0, 1, 1, 0, 0],
+        [0.5, 0, 0, 0, 2, 0],
+        [5, 0, 0, 0, 1, 1],
+        [0, 0, 2, 1, 0, 0],
         [0, 0, 0, 1, 0, 0]
     ]
     graph: Graph = Graph(adjacency_matrix)
@@ -32,3 +32,11 @@ class TestGraphs:
     def test_breadth_first_traversal(self):
         v: Graph.Vertex = self.graph.get_vertex(0)
         assert self.graph.breadth_first_traversal(v) == "012345"
+
+    def test_shortest_path_dijkstra(self):
+        vertices: List[Graph.Vertex] = [self.graph.get_vertex(i) for i in range(self.graph.order())]
+        assert (
+            self.graph.shortest_path_dijkstra(vertices[1], vertices[5])
+            ==
+            [vertices[1], vertices[0], vertices[2], vertices[4], vertices[3], vertices[5]]
+        )
