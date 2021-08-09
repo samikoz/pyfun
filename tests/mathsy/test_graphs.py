@@ -1,7 +1,28 @@
-from typing import List
+import dependency_injector.providers as providers
+import pytest
+import math
+from typing import List, Any, Tuple
 
-from mathsy.graphs import Graph
-from mathsy.graphs.interfaces import VertexInterface
+from mathsy.graphs import Graph, VertexFactories
+from mathsy.graphs.vertex import Vertex
+from mathsy.graphs.interfaces import VertexInterface, T, GraphInterface
+
+
+class VertexRecordingValueAccess(Vertex):
+    def __init__(self, graph: GraphInterface, index: int, value: Any) -> None:
+        super().__init__(graph, index, value)
+        self.value_checked: bool = False
+
+    def value(self) -> T:
+        self.value_checked = True
+        return super().value()
+
+
+@pytest.fixture
+def override_vertex():
+    VertexFactories.regular.override(providers.Factory(VertexRecordingValueAccess))
+    yield lambda: None
+    VertexFactories.regular.reset_override()
 
 
 class TestGraphs:
@@ -16,6 +37,12 @@ class TestGraphs:
         [0, 0, 0, 1, 0, 0]
     ]
     graph: Graph = Graph(adjacency_matrix)
+
+    @staticmethod
+    def _euclidean_distance(v1: VertexInterface, v2: VertexInterface) -> float:
+        v1_coords: Tuple[float, float] = v1.value()
+        v2_coords: Tuple[float, float] = v2.value()
+        return math.sqrt((v1_coords[0] - v2_coords[0])**2 + (v1_coords[1] - v2_coords[1])**2)
 
     def test_order(self):
         assert self.graph.order() == 6
@@ -58,10 +85,27 @@ class TestGraphs:
         v: VertexInterface = self.graph.get_vertex(0)
         assert self.graph.breadth_first_traversal(v) == "012345"
 
-    def test_shortest_path_astar(self):
+    def test_shortest_path_dijkstra(self):
         vertices: List[VertexInterface] = [self.graph.get_vertex(i) for i in range(self.graph.order())]
         assert (
             self.graph.shortest_path_astar(vertices[1], vertices[5])
             ==
             [vertices[1], vertices[0], vertices[2], vertices[4], vertices[3], vertices[5]]
         )
+
+    def test_astar_traverses_according_to_heuristic(self, override_vertex):
+        override_vertex()
+        graph: Graph = Graph([])
+        graph.add_vertex([0], (0, 0))
+        graph.add_vertex([1, 0], (1, 1))
+        graph.add_vertex([0, 1, 0], (3, 1.5))
+        graph.add_vertex([0, 0, 1, 0], (3.5, 2))
+        graph.add_vertex([1, 1, 0, 0, 0], (1.5, 0.5))
+        graph.add_vertex([0, 0, 0, 0, 1, 0], (1, -3))
+        graph.add_vertex([0, 0, 0, 0, 0, 1, 0], (1, -4))
+
+        source: VertexInterface = graph.get_vertex(0)
+        goal: VertexInterface = graph.get_vertex(3)
+        graph.shortest_path_astar(source, goal, self._euclidean_distance)
+
+        assert graph.get_vertex(6).value_checked is False
