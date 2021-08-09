@@ -1,9 +1,12 @@
 from typing import List
 
 from mathsy.graphs import Graph
+from mathsy.graphs.interfaces import VertexInterface
 
 
 class TestGraphs:
+    # should decouple vertex from graph tests if one cared
+
     adjacency_matrix: List[List[float]] = [
         [0, 1, 0.5, 5, 0, 0],
         [1, 0, 0, 0, 0, 0],
@@ -19,11 +22,23 @@ class TestGraphs:
 
     def test_get_vertex(self):
         for i in range(6):
-            assert self.graph.get_vertex(i).index == i
+            assert self.graph.get_vertex(i).index() == i
+
+    def test_adjacency(self):
+        assert (
+            self.graph.adjacencies()
+            ==
+            ((0, 1, 1, 1, 0, 0),
+             (1, 0, 0, 0, 0, 0),
+             (1, 0, 0, 0, 1, 0),
+             (1, 0, 0, 0, 1, 1),
+             (0, 0, 1, 1, 0, 0),
+             (0, 0, 0, 1, 0, 0))
+        )
 
     def test_neighbours(self):
-        v: Graph.Vertex = self.graph.get_vertex(2)
-        assert [neighbour.index for neighbour in v.neighbours()] == [0, 4]
+        v: VertexInterface = self.graph.get_vertex(2)
+        assert [neighbour.index() for neighbour in v.neighbours()] == [0, 4]
 
     def test_adding_vertices(self):
         g: Graph = Graph([])
@@ -31,20 +46,20 @@ class TestGraphs:
         g.add_vertex([1, 0], -1)
         g.add_vertex([0, 1, 0], 0.5)
 
-        v: Graph.Vertex = g.get_vertex(2)
-        assert v.value == 0.5
+        v: VertexInterface = g.get_vertex(2)
+        assert v.value() == 0.5
         assert list(v.neighbours()) == [g.get_vertex(1)]
 
     def test_depth_first_traversal(self):
-        v: Graph.Vertex = self.graph.get_vertex(0)
+        v: VertexInterface = self.graph.get_vertex(0)
         assert self.graph.depth_first_traversal(v) == "035421"
 
     def test_breadth_first_traversal(self):
-        v: Graph.Vertex = self.graph.get_vertex(0)
+        v: VertexInterface = self.graph.get_vertex(0)
         assert self.graph.breadth_first_traversal(v) == "012345"
 
     def test_shortest_path_astar(self):
-        vertices: List[Graph.Vertex] = [self.graph.get_vertex(i) for i in range(self.graph.order())]
+        vertices: List[VertexInterface] = [self.graph.get_vertex(i) for i in range(self.graph.order())]
         assert (
             self.graph.shortest_path_astar(vertices[1], vertices[5])
             ==
