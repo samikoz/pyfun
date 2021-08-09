@@ -43,10 +43,10 @@ class TestGraphs:
         v: Graph.Vertex = self.graph.get_vertex(0)
         assert self.graph.breadth_first_traversal(v) == "012345"
 
-    def test_shortest_path_dijkstra(self):
+    def test_shortest_path_astar(self):
         vertices: List[Graph.Vertex] = [self.graph.get_vertex(i) for i in range(self.graph.order())]
         assert (
-            self.graph.shortest_path_dijkstra(vertices[1], vertices[5])
+            self.graph.shortest_path_astar(vertices[1], vertices[5])
             ==
             [vertices[1], vertices[0], vertices[2], vertices[4], vertices[3], vertices[5]]
         )

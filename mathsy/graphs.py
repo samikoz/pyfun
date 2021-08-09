@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, Iterator, MutableMapping, Mapping, Optional, Set, Any
+from typing import List, Iterator, MutableMapping, Mapping, Optional, Set, Any, Callable
 from collections import deque
 import itertools
 import math
@@ -86,20 +86,25 @@ class Graph:
             end = previous[end]
         return list(reversed(path[:-1]))
 
-    def shortest_path_dijkstra(self, source: Vertex, goal: Vertex) -> Optional[List[Vertex]]:
+    def shortest_path_astar(self, source: Vertex, goal: Vertex,
+                            heuristic: Callable[[Vertex, Vertex], float] = lambda x, y: 0) -> Optional[List[Vertex]]:
+
         unvisited_vertices: Set[Graph.Vertex] = {self.get_vertex(i) for i in range(self.order())}
         previous: MutableMapping[Graph.Vertex, Graph.Vertex] = {v: None for v in unvisited_vertices}
-        distance: MutableMapping[Graph.Vertex, float] = {v: math.inf for v in unvisited_vertices}
-        distance[source] = 0
+        actual_dist: MutableMapping[Graph.Vertex, float] = {v: math.inf for v in unvisited_vertices}
+        estimated_dist: MutableMapping[Graph.Vertex, float] = {v: math.inf for v in unvisited_vertices}
+        actual_dist[source] = 0
+        estimated_dist[source] = heuristic(source, goal)
 
         while unvisited_vertices:
-            current: Graph.Vertex = sorted(((v, distance[v]) for v in unvisited_vertices), key=lambda t: t[1])[0][0]
+            current: Graph.Vertex = sorted(((v, estimated_dist[v]) for v in unvisited_vertices), key=lambda t: t[1])[0][0]
             unvisited_vertices.remove(current)
             for neighbour in unvisited_vertices.intersection(current.neighbours()):
-                new_distance = distance[current] + self.get_weight(current, neighbour)
-                if new_distance < distance[neighbour]:
+                new_distance = actual_dist[current] + self.get_weight(current, neighbour)
+                if new_distance < actual_dist[neighbour]:
                     previous[neighbour] = current
-                    distance[neighbour] = new_distance
+                    actual_dist[neighbour] = new_distance
+                    estimated_dist[neighbour] = new_distance + heuristic(neighbour, goal)
                     if neighbour == goal:
                         return self._recreate_path(goal, previous)
 
