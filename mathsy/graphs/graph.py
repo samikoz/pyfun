@@ -9,7 +9,7 @@ from mathsy.graphs.interfaces import VertexInterface, GraphInterface
 from mathsy.graphs.edge import Edge
 
 
-class _Graph(GraphInterface):
+class _UndirectedGraph(GraphInterface):
     """defined by an adjacency matrix. add weights instead of bools for a weighted graph."""
 
     def __init__(self, adjacency_matrix: List[List[float]],
