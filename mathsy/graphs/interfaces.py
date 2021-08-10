@@ -35,6 +35,7 @@ class GraphInterface(abc.ABC):
 
     @abc.abstractmethod
     def adjacencies(self) -> Tuple[Tuple[bool]]:
+        # to be decommissioned after edges() takeover
         pass
 
     @abc.abstractmethod

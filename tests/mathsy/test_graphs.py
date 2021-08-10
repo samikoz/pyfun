@@ -47,12 +47,16 @@ class TestGraphs:
     def test_order(self):
         assert self.graph.order() == 6
 
-    def test_get_vertex(self):
+    def test_vertex(self):
         for i in range(6):
             assert self.graph.vertex(i).index() == i
 
-    def test_get_vertices(self):
+    def test_vertices(self):
         assert list(self.graph.vertices()) == [self.graph.vertex(i) for i in range(self.graph.order())]
+
+    def test_edges(self):
+        g: Graph = Graph([[0, 1, 1], [1, 0, 0], [1, 0, 0]])
+        assert {e.vertices for e in g.edges()} == {frozenset({g.vertex(0), g.vertex(1)}), frozenset({g.vertex(0), g.vertex(2)})}
 
     def test_adjacency(self):
         assert (
@@ -71,6 +75,7 @@ class TestGraphs:
         assert [neighbour.index() for neighbour in v.neighbours()] == [0, 4]
 
     def test_adding_vertices(self):
+        # integration test
         g: Graph = Graph([])
         g.add_vertex([0], 5.5)
         g.add_vertex([1, 0], -1)
@@ -79,6 +84,8 @@ class TestGraphs:
         v: VertexInterface = g.vertex(2)
         assert v.value() == 0.5
         assert list(v.neighbours()) == [g.vertex(1)]
+        assert (g.adjacencies() == ((0, 1, 0), (1, 0, 1), (0, 1, 0)))
+        assert {e.vertices for e in g.edges()} == {frozenset({g.vertex(0), g.vertex(1)}), frozenset({g.vertex(1), g.vertex(2)})}
 
     def test_depth_first_traversal(self):
         v: VertexInterface = self.graph.vertex(0)

@@ -1,25 +1,36 @@
 from __future__ import annotations
 
 import math
-from typing import List, MutableMapping, Mapping, Optional, Set, Any, Callable, Tuple, Iterator
+import itertools
+from typing import List, MutableMapping, Mapping, Optional, Any, Callable, Tuple, Iterator, Set
 from collections import deque
 
 from mathsy.graphs.interfaces import VertexInterface, GraphInterface
+from mathsy.graphs.edge import Edge
 
 
 class _Graph(GraphInterface):
     """defined by an adjacency matrix. add weights instead of bools for a weighted graph."""
 
-    def __init__(self, adjacency_matrix: List[List[float]], vertex_factory: Callable[[GraphInterface, int, Any], VertexInterface]) -> None:
+    def __init__(self, adjacency_matrix: List[List[float]],
+                 vertex_factory: Callable[[GraphInterface, int, Any], VertexInterface]) -> None:
 
         self._vertex_factory: Callable[[GraphInterface, int, Any], VertexInterface] = vertex_factory
         self._adjacencies: List[List[float]] = adjacency_matrix
         self._vertices: List[VertexInterface] = [self._create_vertex(i) for i in range(len(adjacency_matrix))]
+        self._edges: Set[Edge] = self._create_edges(adjacency_matrix)
 
         self._validate_adjacency()
 
     def _create_vertex(self, index: int, value: Any = None) -> VertexInterface:
         return self._vertex_factory(self, index, value)
+
+    def _create_edges(self, adjacencies: List[List[float]]) -> Set[Edge]:
+        return set(itertools.chain.from_iterable([[
+            Edge(self._vertices[i], self._vertices[j], adjacencies[i][j])
+            for j in range(1, len(adjacencies)) if adjacencies[i][j]
+        ] for i in range(len(adjacencies))
+        ]))
 
     def _validate_adjacency(self) -> None:
         order: int = self.order()
@@ -31,6 +42,9 @@ class _Graph(GraphInterface):
 
     def vertices(self) -> Iterator[VertexInterface]:
         return iter(self._vertices)
+    
+    def edges(self) -> Iterator[Edge]:
+        return iter(self._edges)
 
     def get_weight(self, v1: VertexInterface, v2: VertexInterface) -> float:
         return self._adjacencies[v1.index()][v2.index()]
@@ -39,10 +53,13 @@ class _Graph(GraphInterface):
         for index in range(self.order()):
             self._adjacencies[index].append(adjacency[index])
         self._adjacencies.append(adjacency)
-        self._vertices.append(self._create_vertex(self.order(), value))
+        new_vertex: VertexInterface = self._create_vertex(self.order(), value)
+        self._vertices.append(new_vertex)
+        self._edges.update(Edge(new_vertex, self.vertex(i), adjacency[i]) for i in range(len(adjacency) - 1) if adjacency[i])
         self._validate_adjacency()
 
     def adjacencies(self) -> Tuple[Tuple[bool]]:
+        # to be decommissioned after edges() takeover
         return tuple(tuple(True if x != 0 else False for x in adjacency) for adjacency in self._adjacencies)
 
     def order(self) -> int:
