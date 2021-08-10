@@ -80,14 +80,14 @@ class _UndirectedGraph(GraphInterface):
 
     @staticmethod
     def breadth_first_traversal(v: VertexInterface) -> str:
-        visited: List[VertexInterface] = []
+        visited: List[VertexInterface] = [v]
         to_traverse: deque[VertexInterface] = deque([v])
         while len(to_traverse):
             v: VertexInterface = to_traverse.pop()
-            if v not in visited:
-                for n in v.neighbours():
+            for n in v.neighbours():
+                if n not in visited:
+                    visited.append(n)
                     to_traverse.appendleft(n)
-                visited.append(v)
 
         return "".join(map(lambda vertex: str(vertex.index()), visited))
 
