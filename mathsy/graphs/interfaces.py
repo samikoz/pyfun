@@ -23,7 +23,10 @@ class VertexInterface(abc. ABC, Generic[T]):
 
 class GraphInterface(abc.ABC):
     @abc.abstractmethod
-    def get_vertex(self, i: int) -> VertexInterface:
+    def vertex(self, i: int) -> VertexInterface:
+        pass
+
+    def vertices(self) -> Iterator[VertexInterface]:
         pass
 
     @abc.abstractmethod

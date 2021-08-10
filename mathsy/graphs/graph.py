@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import math
-from typing import List, MutableMapping, Mapping, Optional, Set, Any, Callable, Tuple
+from typing import List, MutableMapping, Mapping, Optional, Set, Any, Callable, Tuple, Iterator
 from collections import deque
 
 from mathsy.graphs.interfaces import VertexInterface, GraphInterface
@@ -26,8 +26,11 @@ class _Graph(GraphInterface):
         for adjacency in self._adjacencies:
             assert len(adjacency) == order
 
-    def get_vertex(self, i: int) -> VertexInterface:
+    def vertex(self, i: int) -> VertexInterface:
         return self._vertices[i]
+
+    def vertices(self) -> Iterator[VertexInterface]:
+        return iter(self._vertices)
 
     def get_weight(self, v1: VertexInterface, v2: VertexInterface) -> float:
         return self._adjacencies[v1.index()][v2.index()]
@@ -83,7 +86,7 @@ class _Graph(GraphInterface):
                             heuristic: Callable[[VertexInterface, VertexInterface], float] = lambda x, y: 0) \
             -> Optional[List[VertexInterface]]:
 
-        unvisited_vertices: Set[VertexInterface] = {self.get_vertex(i) for i in range(self.order())}
+        unvisited_vertices: Set[VertexInterface] = {self.vertex(i) for i in range(self.order())}
         previous: MutableMapping[VertexInterface, VertexInterface] = {v: None for v in unvisited_vertices}
         actual_dist: MutableMapping[VertexInterface, float] = {v: math.inf for v in unvisited_vertices}
         estimated_dist: MutableMapping[VertexInterface, float] = {v: math.inf for v in unvisited_vertices}

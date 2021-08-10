@@ -21,4 +21,4 @@ class Vertex(VertexInterface):
 
     def neighbours(self) -> Iterator[VertexInterface]:
         adjacency: Tuple[bool] = self._graph.adjacencies()[self._index]
-        return (self._graph.get_vertex(i) for i in itertools.compress(range(self._graph.order()), adjacency))
+        return itertools.compress(self._graph.vertices(), adjacency)
